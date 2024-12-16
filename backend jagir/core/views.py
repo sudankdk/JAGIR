@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics, permissions
+from rest_framework.exceptions import AuthenticationFailed
 
 from rest_framework.views import APIView
 from rest_framework import status
@@ -17,6 +18,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.contrib.auth import authenticate
+
 
 @api_view(['POST'])
 def register(request):
@@ -32,36 +35,38 @@ def register(request):
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
-    def post(self,request,*args,**kwargs):
-        try:
-            response= super().post(request,*args,**kwargs)
-            tokens= response.data
-            
-            access_token= tokens["access"]
-            refresh_token= tokens["refresh"]
-            
-            res = Response()
-            
-            res.data={"success":True}
-            res.set_cookie(
-                key='access_token',
-                value=access_token,
-                httponly=True,
-                secure=True,
-                samesite='None',
-                path='/'
-            )
-            res.set_cookie(
-                key='refresh_token',
-                value=refresh_token,
-                httponly=True,
-                secure=True,
-                samesite='None',
-                path='/'
-            )
-            return res
-        except:
-            return Response({"success":False})
+     def post(self, request, *args, **kwargs):
+        # Parse user credentials
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            raise AuthenticationFailed("Username and password are required")
+
+        # Authenticate the user
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise AuthenticationFailed("Invalid credentials")
+
+        # If user is authenticated, generate JWT tokens
+        serializer = MyUserSerializer(user)
+        response = super().post(request, *args, **kwargs)  # Generate tokens
+
+        # Include the user information in the response (optional)
+        tokens = response.data
+        access_token = tokens['access']
+        refresh_token = tokens['refresh']
+
+        # You can include user-related information like username in the response if desired
+        return Response({
+            'success': True,
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'username': user.username,  # You can also return any other user information if needed
+                 # Including the user_id for reference
+        }, status=status.HTTP_200_OK)
+
 
 class CustomRefreshToekn(TokenRefreshView):
     def post(self,request,*args,**kwargs):

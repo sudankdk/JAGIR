@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { UseAuth } from "../Context/UseAuth";
-import Error from "../Notifications/Error";
-import Success from "../Notifications/Success";
-import { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -13,10 +10,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      <Error text="no username or password " />;
-      return;
-    }
 
     setError(""); // Reset error
     setLoading(true); // Start loading

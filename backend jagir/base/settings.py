@@ -43,21 +43,28 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+# JWT Configuration
 REST_FRAMEWORK = {
-    
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        
-        'core.Authenticate.CookiesAuthentication',
-    )
-    
-}
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}   
+
+
 from datetime import timedelta
 
 
 SIMPLE_JWT = {
     "USER_ID_FIELD":'username',
-    # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    # "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    'ALGORITHM': 'HS256',  # Specify the algorithm for signing (HS256 is default)
+    'SIGNING_KEY': SECRET_KEY,  # This is the key used to sign JWTs (default is SECRET_KEY)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token lifetime
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),  # Refresh token lifetime
+    'ROTATE_REFRESH_TOKENS': False,  # Set to True if you want to rotate refresh tokens
+    'BLACKLIST_AFTER_ROTATION': False,  # Whether to blacklist the old refresh token after rotation
 }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

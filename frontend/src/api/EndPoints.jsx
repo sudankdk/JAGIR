@@ -41,7 +41,14 @@ export const login = async (username, password) => {
   try {
     const response = await api.post(ENDPOINTS.LOGIN, { username, password });
     console.log("Login success:", response.data);
+    const data = response.data;
+
+    if (response.data.success === true) {
+      localStorage.setItem("accessToken", data.access_token);
+      localStorage.setItem("username", username);
+    }
     return response.data;
+    
   } catch (error) {
     console.error("Login failed:", error.response?.data || error.message);
     throw error;
@@ -95,7 +102,12 @@ export const register = async (
 // Get User Profile
 export const get_user_profile_data = async (username) => {
   try {
-    const response = await api.get(ENDPOINTS.USER_PROFILE(username));
+    const token = localStorage.getItem("accessToken");
+    const response = await api.get(ENDPOINTS.USER_PROFILE(username),{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log("User profile fetched:", response.data);
     return response.data;
   } catch (error) {
