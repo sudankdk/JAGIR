@@ -1,4 +1,5 @@
 import { FaBriefcase } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -23,10 +24,10 @@ const Navbar = () => {
             </a>
             <div className="flex items-center justify-between space-x-4">
               <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Login
+                <Link to="/login">Login</Link>
               </button>
               <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Sign in
+                <Link to="/signin">Sign in</Link>
               </button>
             </div>
           </div>

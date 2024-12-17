@@ -2,11 +2,11 @@ import { SearchBar } from "./SearchBar";
 
 export function Hero() {
   return (
-    <div className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-black py-20">
+    <div className="relative bg-gradient-to-r from-blue-800 to-green-800 text-black py-20">
       <div className="absolute inset-0 bg-black opacity-30"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl text-white md:text-5xl font-bold mb-4">
             Find Your Dream Job Today
           </h1>
           <p className="text-xl text-blue-100 mb-8">

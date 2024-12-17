@@ -1,7 +1,7 @@
 import LeftSideLogin from "../Components/LeftSideLogin";
-import RightSideLogin from "../Components/RightSideLogin";
+import SignUp from "../Components/RightSideSignup";
 
-const Login = () => {
+const Sign = () => {
   return (
     <div className="flex h-screen">
       {/* Left Side */}
@@ -11,10 +11,10 @@ const Login = () => {
 
       {/* Right Side */}
       <div className="w-3/5 p-8">
-        <RightSideLogin />
+        <SignUp />
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Sign;
