@@ -11,7 +11,9 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <FaBriefcase className="h-8 w-8 text-blue-500" />
-              <span className="text-2xl font-bold text-white">JobHub</span>
+              <span className="text-2xl font-bold text-white">
+                JagireNepali
+              </span>
             </div>
             <p className="text-gray-400">
               Connecting talented professionals with amazing opportunities

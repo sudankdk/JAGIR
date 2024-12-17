@@ -1,45 +1,13 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 
-// Type definition for the SearchBar props
-interface SearchBarProps {
-  onSearch: (query: string, location: string) => void;
-}
-
-// Debounce function definitio
-function debounce<T extends (...args: any[]) => void>(
-  func: T,
-  delay: number
-): (...args: Parameters<T>) => void {
-  let timer: ReturnType<typeof setTimeout>;
-  return function (...args: Parameters<T>) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-}
-
-export function SearchBar({ onSearch }: SearchBarProps) {
+export function SearchBar() {
   const [query, setQuery] = React.useState("");
   const [location, setLocation] = React.useState("");
 
-  // Define the debounced onSearch function using useCallback
-  const debouncedSearch = useCallback(
-    debounce((query: string, location: string) => {
-      onSearch(query, location); 
-    }, 500), 
-    [onSearch] 
-  );
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(query, location); // Direct call to onSearch on form submit
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-4xl">
+    <form className="w-full max-w-4xl">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1 relative">
           <CiSearch
@@ -53,7 +21,6 @@ export function SearchBar({ onSearch }: SearchBarProps) {
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              debouncedSearch(e.target.value, query); 
             }}
           />
         </div>
@@ -70,7 +37,6 @@ export function SearchBar({ onSearch }: SearchBarProps) {
             value={location}
             onChange={(e) => {
               setLocation(e.target.value);
-              debouncedSearch(location, e.target.value); 
             }}
           />
         </div>
