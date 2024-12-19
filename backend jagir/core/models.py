@@ -26,6 +26,7 @@ class Job(models.Model):
     job_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="jobs_posted")
     job_name = models.CharField(max_length=100)
+    location=models.CharField(max_length=90)
     description = models.TextField()
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,7 +34,7 @@ class Job(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-
+    
     def __str__(self):
         return f"{self.job_name} by {self.user.username}"
 
