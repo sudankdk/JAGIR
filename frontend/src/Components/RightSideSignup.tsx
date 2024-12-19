@@ -53,6 +53,19 @@ const SignUp = () => {
               </button>
             </div>
 
+            {/* Role */}
+            <div className="relative">
+              <select
+                name="role"
+                id="role"
+                className=" text-gray-500 hover:text-gray-700"
+              >
+                <option value=""> Select </option>
+                <option value="JS">Job Seeker</option>
+                <option value="JG">Job Giver</option>
+              </select>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import MyUser
+from .models import MyUser,Job
 
 class MyUserSerializer(serializers.ModelSerializer):
     
@@ -50,3 +50,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
         
         data['user']=user
         return data
+    
+class JobSerializer(serializers.ModelSerializer):
+    user=MyUserSerializer(read_only=True)
+    class Meta:
+        model=Job
+        fields=['job_id','user','job_name','location','description','salary','created_at','status','skills']
+        read_only_fields=['job_id','user','created_at']
+        

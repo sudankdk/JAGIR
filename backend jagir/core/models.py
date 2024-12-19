@@ -28,6 +28,7 @@ class Job(models.Model):
     job_name = models.CharField(max_length=100)
     location=models.CharField(max_length=90)
     description = models.TextField()
+    skills=models.TextField(blank=True)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.OPEN)
