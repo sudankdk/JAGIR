@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import MyUser,Job
+from .models import MyUser,Job,JobApplication
 
 class MyUserSerializer(serializers.ModelSerializer):
     
@@ -58,3 +58,45 @@ class JobSerializer(serializers.ModelSerializer):
         fields=['job_id','user','job_name','location','description','salary','created_at','status','skills']
         read_only_fields=['job_id','user','created_at']
         
+        
+class JobApplicantSerializer(serializers.ModelSerializer):
+    applicant=MyUserSerializer(read_only=True)
+    job=JobSerializer(read_only=True)
+    class Meta:
+        model=Job
+        fields=['job','application_id','applicant','cv','applied_at','application_status']
+        read_only_fields=['application_id','applicant','applied_at','application_status']
+        
+        
+class JobApplySerializer(serializers.ModelSerializer):
+    applicant=MyUserSerializer(read_only=True)
+    job=JobSerializer(read_only=True)
+    cv = serializers.FileField()
+    # job_id=serializers.CharField(write_only=True)
+
+    class Meta:
+        model=JobApplication
+        fields=['applicant','job','cv']
+        read_only_fields=['applicant','job']
+        
+    # def create(self,validated_data):
+    #         cv=validated_data['cv']
+    #         job_id = self.context['request'].data.get('id')
+    #         # job_id=self.context['view'].kwargs.get('id')
+    #         # job_id=self.context['request'].data.get('id')
+    #         # job_id = self.context['request'].kwargs.get('id')  
+    #         try:
+    #             job = Job.objects.get(job_id=job_id)  
+    #         except Job.DoesNotExist:
+    #             raise serializers.ValidationError({"job_id": "Job not found"})
+    #         applicant=self.context['request'].user
+    #         application=JobApplication.objects.create(job=job,applicant=applicant,cv=cv)
+    #         return application
+            
+        
+        
+        
+        
+        
+        
+      

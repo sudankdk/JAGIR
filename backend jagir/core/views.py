@@ -5,7 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .models import Job
-from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,MyUserSerializer
+from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -105,3 +105,31 @@ def delete_job(request,id):
         
     except:
         return Response({"error":"Error in deleting jobs"},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apply_job(request, id):
+    try:
+        applicant_role = request.user.role
+        if applicant_role != "JS":
+            return Response({"error": "Not a valid user "}, status=status.HTTP_403_FORBIDDEN)
+        
+        try:
+            job = Job.objects.get(job_id=id)
+            print(job)
+        except Job.DoesNotExist:
+            return Response({"error": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+        serializer = JobApplySerializer(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            serializer.save(applicant=request.user, job=job)
+            print(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    except Exception as e:
+        return Response({"error": "An error occurred while applying for the job: " + str(e)}, status=status.HTTP_400_BAD_REQUEST)

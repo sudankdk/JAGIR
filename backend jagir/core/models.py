@@ -58,7 +58,7 @@ class JobApplication(models.Model):
     )
 
     class Meta:
-        unique_together = ('applicant', 'job')  # Prevent duplicate applications
+        unique_together = ('applicant', 'job') 
 
     def __str__(self):
         return f"{self.applicant.username} applied to {self.job.job_name}"
