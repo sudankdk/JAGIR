@@ -93,10 +93,11 @@ class JobApplySerializer(serializers.ModelSerializer):
     #         application=JobApplication.objects.create(job=job,applicant=applicant,cv=cv)
     #         return application
             
-        
-        
-        
-        
-        
-        
-      
+class JobApplicantSerializer(serializers.ModelSerializer):
+    applicant=MyUserSerializer(read_only=True)
+    job=JobSerializer(read_only=True)
+    
+    class Meta:
+        model=JobApplication
+        fields=['job','application_id','applicant','cv','applied_at','application_status']
+        read_only_fields=['application_id','applicant','applied_at','application_status']

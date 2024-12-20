@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job
+from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant
 
 urlpatterns = [
     path('login/',CustomLogin.as_view(),name="Login"),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('job/',get_job,name="get_job"),
     path('job/delete/<str:id>/',delete_job,name="delete_job"),
     path('job/apply/<str:id>/',apply_job,name="apply_job"),
+    path('job/applicant/',get_applicant,name="get_applicant"),
     
   
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
