@@ -5,12 +5,30 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .models import Job,JobApplication
+from PyPDF2 import PdfReader
 from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer,JobApplicantSerializer
+import mimetypes
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
+
+def get_file_type(file_path):
+    mime_type,encoding=mimetypes.guess_type(file_path)
+    extension=mime_type.split('/')[1]
+    return extension
+from docx2pdf import convert
+
+def convert_to_pdf(file_path):
+    extension=get_file_type(file_path)
+    if extension=='doc':
+        new_file=file_path.replace(".doc",".pdf")
+        return new_file
+    output_path = file_path.replace(".docx", ".pdf")
+    convert(file_path,output_path)
+    return output_path
 
 
 class CustomLogin(TokenObtainPairView):
@@ -187,3 +205,34 @@ def close_job(request,id):
             return Response({"message":"Job Closed"},status=status.HTTP_200_OK)
     except:
         return Response({"error":"Error in closing job"},status=status.HTTP_400_BAD_REQUEST)
+
+def get_pdf_pages(file_path):
+    reader=PdfReader(file_path)
+    pages=[page.extract_text() for page in reader.pages]
+    return pages
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def open_cv(request,id):
+    try:
+        user_role=request.user.role
+        print(user_role)
+        page_number=int(request.data.get('page',1))
+        print(page_number)
+        if user_role=="JG":
+            applicant=JobApplication.objects.get(application_id=id)
+            print("ya samma aako xaina")
+            print(applicant)
+            cv=applicant.cv
+            if get_file_type(cv.path)!="pdf":
+                cv=convert_to_pdf(cv.path)
+            pages=get_pdf_pages(cv)
+            if page_number>len(pages) or page_number<1:
+                return Response({"error":"Invalid page number"},status=status.HTTP_400_BAD_REQUEST)  
+            return Response({
+            "page_number": page_number,
+            "content": pages[page_number - 1],
+            "total_pages": len(pages)
+        }, status=status.HTTP_200_OK)         
+    except Exception as e:
+        return Response({"error":f"Error in opening cv:{str(e)}"},status=status.HTTP_400_BAD_REQUEST)
