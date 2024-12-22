@@ -19,6 +19,7 @@ def get_file_type(file_path):
     mime_type,encoding=mimetypes.guess_type(file_path)
     extension=mime_type.split('/')[1]
     return extension
+
 from docx2pdf import convert
 
 def convert_to_pdf(file_path):
@@ -227,11 +228,14 @@ def open_cv(request,id):
             if get_file_type(cv.path)!="pdf":
                 cv=convert_to_pdf(cv.path)
             pages=get_pdf_pages(cv)
+            # cv_pages={}
+            # for i,v in enumerate(pages):
+            #     cv_pages[i]=v
             if page_number>len(pages) or page_number<1:
                 return Response({"error":"Invalid page number"},status=status.HTTP_400_BAD_REQUEST)  
             return Response({
             "page_number": page_number,
-            "content": pages[page_number - 1],
+            "content": pages[page_number-1],
             "total_pages": len(pages)
         }, status=status.HTTP_200_OK)         
     except Exception as e:
