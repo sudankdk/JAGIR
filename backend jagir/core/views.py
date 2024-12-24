@@ -1,12 +1,13 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
-from .models import Job,JobApplication
+from .models import Job,JobApplication,MyUser
 from PyPDF2 import PdfReader
-from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer,JobApplicantSerializer
+from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer,JobApplicantSerializer,MyUserSerializer
 import mimetypes
 
 from rest_framework_simplejwt.views import (
@@ -254,3 +255,31 @@ def open_cv(request,id):
         )  
     except Exception as e:
         return Response({"error":f"Error in opening cv:{str(e)}"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def search_usernames(request,username):
+    try:
+        user=get_object_or_404(MyUser,username=username)
+        serializer=MyUserSerializer(user)
+        
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({
+            "error":"error in searching username",
+            "error message":f"{str(e)}"
+                
+        },status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+@api_view(['POST'])
+def search_job_by_location(request,location):
+    try:
+        job=get_object_or_404(Job,location=location)
+        pass
+    except:
+        pass
+        
+
+       
+@api_view(['GET'])
+def search_job_by_jobname(request):
+    pass
