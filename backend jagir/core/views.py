@@ -270,16 +270,29 @@ def search_usernames(request,username):
                 
         },status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-@api_view(['POST'])
+@api_view(['GET'])
 def search_job_by_location(request,location):
     try:
-        job=get_object_or_404(Job,location=location)
-        pass
-    except:
-        pass
+        # job=get_object_or_404(Job,location=location)  it only gave single object
+        
+        job=Job.objects.filter(location=location) 
+        serializer=JobSerializer(job,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"Not Found" :"Job in this location is not available yet",
+                         "error":str(e)
+                         }, status=status.HTTP_404_NOT_FOUND)
         
 
        
 @api_view(['GET'])
-def search_job_by_jobname(request):
-    pass
+def search_job_by_jobname(request,jobname):
+    try:
+        job=Job.objects.filter(job_name=jobname)
+        serializer=JobSerializer(job,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"Not Found":"Job name not found",
+                         "error":str(e)
+                         },status=status.HTTP_404_NOT_FOUND
+                        )
