@@ -5,10 +5,14 @@ from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
-from .models import Job,JobApplication,MyUser
+from .models import Job,JobApplication,MyUser,SavedJob
 from PyPDF2 import PdfReader
-from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer,JobApplicantSerializer,MyUserSerializer
+from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer,JobApplicantSerializer,MyUserSerializer,SavedJobSerializer
 import mimetypes
+from rest_framework.views import APIView
+from django.utils.decorators import method_decorator
+
+
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -296,3 +300,35 @@ def search_job_by_jobname(request,jobname):
                          "error":str(e)
                          },status=status.HTTP_404_NOT_FOUND
                         )
+        
+@api_view(['GET'])       
+def Search_by_location_name(request,jobname,location):
+    try:
+        job=Job.objects.filter(job_name=jobname,location=location)
+        serializer=JobSerializer(job,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"Not Found":"Job name not found",
+                         "error":str(e)
+                         },status=status.HTTP_404_NOT_FOUND
+                        )
+
+@method_decorator(permission_classes([IsAuthenticated]), name='dispatch')
+class SavedJobs(APIView):
+    def get(self,request):
+        saved_jobs = SavedJob.objects.filter(user=request.user)         
+        serializer=SavedJobSerializer(saved_jobs,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def post(self,request,job_id):
+        try:
+            job=get_object_or_404(Job,job_id=job_id)
+            user=request.user
+            saved_job, created = SavedJob.objects.get_or_create(user=user, job=job)  
+            if not created:
+                return Response({"message": "Job is already saved"}, status=status.HTTP_200_OK)
+            serilaizer=SavedJobSerializer(saved_job)
+            return Response(serilaizer.data,status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"not saved":"job not saved in bookmars",
+                            "error":str(e)},status=status.HTTP_400_BAD_REQUEST)

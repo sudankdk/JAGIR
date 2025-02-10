@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import MyUser,Job,JobApplication
+from .models import MyUser,Job,JobApplication,SavedJob
 
 class MyUserSerializer(serializers.ModelSerializer):
     
@@ -101,3 +101,12 @@ class JobApplicantSerializer(serializers.ModelSerializer):
         model=JobApplication
         fields=['job','application_id','applicant','cv','applied_at','application_status']
         read_only_fields=['application_id','applicant','applied_at','application_status']
+        
+        
+class SavedJobSerializer(serializers.ModelSerializer):
+    user=MyUserSerializer(read_only=True)
+    job=JobSerializer(read_only=True)
+    class Meta:
+        model=SavedJob
+        fields=['user','job','saved_at']
+        read_only_fields=['user']

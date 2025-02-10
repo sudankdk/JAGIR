@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,shortlist_applicant,reject_applicant,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname
+from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,shortlist_applicant,reject_applicant,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name
 
 
 urlpatterns = [
@@ -27,6 +27,12 @@ urlpatterns = [
     path('search/users/<str:username>/',search_usernames,name="username-serach-usernames"),
     path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),
     path('search/job/<str:jobname>/',search_job_by_jobname,name="search-job-jobname"),
+    path('search/job/<str:jobname>/<str:location>/',Search_by_location_name,name="search-location-name"),
+    
+    
+    #saved jobs
+    path('saved/jobs/',SavedJobs.as_view(),name="saved jobs"),
+    path('saved/jobs/<str:job_id>/',SavedJobs.as_view(),name="saved jobs")
     
     
     
