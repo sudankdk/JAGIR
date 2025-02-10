@@ -1,10 +1,9 @@
-import React from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
 
 const DashNav = () => {
   return (
-    <div className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
+    <div className="flex justify-between items-center px-8 py-4 border-b-2 border-gray-300 bg-white">
       {/* Left Section */}
       <div>
         <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>

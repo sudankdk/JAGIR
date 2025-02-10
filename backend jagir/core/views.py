@@ -278,7 +278,6 @@ def search_usernames(request,username):
 def search_job_by_location(request,location):
     try:
         # job=get_object_or_404(Job,location=location)  it only gave single object
-        
         job=Job.objects.filter(location=location) 
         serializer=JobSerializer(job,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
