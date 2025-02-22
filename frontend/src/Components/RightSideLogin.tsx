@@ -1,13 +1,36 @@
 import React, { useState } from "react";
 import { FaBriefcase, FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../Services/Endpont";
+import { useAuth } from "../context/UseAuth"; // ✅ Import AuthContext
 
 const RightSideLogin = () => {
+  const [username, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { auth_login } = useAuth(); // ✅ Get auth_login function
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleLogin = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    try {
+      const data = await login(username, password);
+      if (data.success) {
+        auth_login({ username }); // ✅ Save user in AuthContext
+        navigate(`/Dashboard`);
+      } else {
+        alert("Invalid username or password");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {/* Header */}
@@ -17,7 +40,7 @@ const RightSideLogin = () => {
       </div>
 
       {/* Login Form */}
-      <form className="pl-24 mt-8 space-y-6">
+      <form className="pl-24 mt-8 space-y-6" onSubmit={handleLogin}>
         <div className="m-20">
           {/* Username Input */}
           <div className="relative m-2">
@@ -26,6 +49,8 @@ const RightSideLogin = () => {
               type="text"
               placeholder="Username"
               className="w-full pl-12 p-3 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
 
@@ -36,6 +61,8 @@ const RightSideLogin = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               className="w-full pl-12 p-3 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -46,6 +73,7 @@ const RightSideLogin = () => {
             </button>
           </div>
 
+          {/* Login Button */}
           <button
             type="submit"
             className="w-full py-3 mt-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
@@ -59,7 +87,6 @@ const RightSideLogin = () => {
               Forgot Password?
             </a>
             <Link to="/signin" className="text-blue-600 hover:underline">
-              {" "}
               Sign Up
             </Link>
           </div>
