@@ -14,7 +14,7 @@ const useAxiosInterceptors = () => {
   useEffect(() => {
     const requestInterceptors = api.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken");
         if (token) {
           config.headers.authorization = `Bearer ${token}`;
         }
@@ -33,8 +33,8 @@ const useAxiosInterceptors = () => {
       }
     );
     return () => {
-      axios.interceptors.request.eject(requestInterceptors);
-      axios.interceptors.response.eject(responseInterceptors);
+      api.interceptors.request.eject(requestInterceptors);
+      api.interceptors.response.eject(responseInterceptors);
     };
   }, []);
 };
@@ -43,6 +43,7 @@ export const login = async (username: string, password: string) => {
   try {
     const response = await api.post("/login/", { username, password });
     const data = response.data;
+    console.log(data);
     if (data.success === true) {
       localStorage.setItem("accessToken", data.access_token);
       localStorage.setItem("username", username);
@@ -54,3 +55,25 @@ export const login = async (username: string, password: string) => {
   }
 };
 
+export const register = async (
+  username: string,
+  password: string,
+  email: string,
+  role: string
+) => {
+  try {
+    console.log("hello");
+    const response = await api.post("/register/", {
+      username,
+      password,
+      email,
+      role,
+    });
+    return response;
+  } catch (error) {
+    console.log("registration error", error);
+    throw error;
+  }
+};
+
+export default useAxiosInterceptors;
