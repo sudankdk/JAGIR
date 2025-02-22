@@ -2,6 +2,14 @@ import { IoIosNotifications } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
 
 const DashNav = () => {
+  const getname = () => {
+    const nameobject = localStorage.getItem("username");
+    if (nameobject) {
+      const name = JSON.parse(nameobject);
+      return name.username;
+    }
+    return null;
+  };
   return (
     <div className="flex justify-between items-center px-8 py-4 border-b-2 border-gray-300 bg-white">
       {/* Left Section */}
@@ -32,7 +40,7 @@ const DashNav = () => {
         />
 
         {/* Username */}
-        <p className="text-gray-800 font-semibold">Username</p>
+        <p className="text-gray-800 font-semibold">{getname()}</p>
       </div>
     </div>
   );
