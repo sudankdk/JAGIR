@@ -43,7 +43,6 @@ export const login = async (username: string, password: string) => {
   try {
     const response = await api.post("/login/", { username, password });
     const data = response.data;
-    console.log(data);
     if (data.success === true) {
       localStorage.setItem("accessToken", data.access_token);
       localStorage.setItem("username", username);
@@ -72,6 +71,24 @@ export const register = async (
     return response;
   } catch (error) {
     console.log("registration error", error);
+    throw error;
+  }
+};
+
+export const allJobs = async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const response = await api.get("/job/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+      return response.data;
+    }
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { FaBriefcase } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 import { IoIosDocument } from "react-icons/io";
 import { Link } from "react-router-dom";
-
+import { allJobs } from "../Services/Endpont";
+import { Job } from "../interface/Interfaces";
 // Reusable JobCard component
-const JobCard = ({ title, company, status, date }) => {
+const JobCard = ({ id, title, location, status, date }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [cvFile, setCvFile] = useState(null); // State to store CV file
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.SyntheticEvent) => {
     const file = e.target.files[0];
     if (file) {
       setCvFile(file);
@@ -27,15 +28,18 @@ const JobCard = ({ title, company, status, date }) => {
   };
 
   return (
-    <div className="bg-slate-100 m-4 p-4 rounded-lg shadow-sm">
+    <div
+      id={id}
+      className="bg-slate-100 m-4 p-4 rounded-lg cursor-pointer shadow-sm hover:translate-x-1 transition-transform duration-200"
+    >
       <div className="flex justify-between items-center">
         <div>
           <h3 className="font-medium">{title}</h3>
-          <p className="text-sm text-gray-600">{company}</p>
+          <p className="text-sm text-gray-600">{location}</p>
         </div>
         <div>
           <h4 className="font-medium text-blue-500">{status}</h4>
-          <p className="text-sm text-gray-500">Date Applied: {date}</p>
+          <p className="text-sm text-gray-500">Date Created: {date}</p>
         </div>
       </div>
 
@@ -80,8 +84,21 @@ const JobCard = ({ title, company, status, date }) => {
 };
 
 const Application = () => {
+  const [jobs, setJobs] = useState<Job[]>();
+
+  useEffect(() => {
+    const handleAllJobs = async () => {
+      try {
+        const response = await allJobs();
+        setJobs(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleAllJobs();
+  }, []);
   return (
-    <div className="h-screen flex flex-col lg:flex-row">
+    <div className="h-auto flex flex-col lg:flex-row">
       {/* Left Side Navigation */}
       <div className="w-full lg:w-1/5 bg-blue-800 text-white p-8">
         <nav className="space-y-6">
@@ -90,7 +107,7 @@ const Application = () => {
             <h2 className="text-lg font-semibold">Overview</h2>
           </div>
 
-          <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
+          <div className="flex items-center space-x-4 bg-blue-600 text-white p-4 rounded-lg cursor-pointer">
             <FaBriefcase className="text-2xl" />
             <h2 className="text-lg font-semibold">Applications</h2>
           </div>
@@ -113,19 +130,23 @@ const Application = () => {
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Applications</h2>
           </div>
-
-          <JobCard
-            title="Job Title"
-            company="Company Name"
-            status="Status"
-            date="Date"
-          />
-          <JobCard
-            title="Job Title"
-            company="Company Name"
-            status="Status"
-            date="Date"
-          />
+          {jobs?.length > 0 ? (
+            jobs?.map((job) => (
+              <JobCard
+                id={job.job_id}
+                title={job.job_name}
+                location={job.location}
+                status={job.status}
+                date={new Date(job.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              />
+            ))
+          ) : (
+            <p>No Jobs available </p>
+          )}
         </div>
       </div>
     </div>
