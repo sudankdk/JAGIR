@@ -8,6 +8,7 @@ import Application from "./Components/Application";
 import Bookmarks from "./Components/Bookmark";
 import { AuthProvider } from "./context/UseAuth";
 import { PrivateRoute } from "./private/PrivateRoute.js";
+import JobDescription from "./Pages/JobDescription.js";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             path="/Dashboard/bookmarks"
             element={<PrivateRoute element={<Bookmarks />} />}
           />
+          <Route path="/job/description" element={<JobDescription />} />
         </Routes>
       </Router>
     </AuthProvider>
