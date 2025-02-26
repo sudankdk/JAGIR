@@ -84,12 +84,28 @@ export const allJobs = async () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+
       return response.data;
     }
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+
+export const savedJobs = async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const response = await api.get("/saved/jobs/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 

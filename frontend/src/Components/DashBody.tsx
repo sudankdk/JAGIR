@@ -4,7 +4,7 @@ import { FaBriefcase } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 import { IoIosDocument } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { allJobs } from "../Services/Endpont";
+import { allJobs, savedJobs } from "../Services/Endpont";
 import { Job } from "../interface/Interfaces";
 
 // Reusable JobCard component
@@ -28,9 +28,9 @@ const JobCard = ({ id, title, location, status, date }) => {
   );
 };
 
-
 const DashBody = () => {
   const [jobs, setJobs] = useState<Job[]>();
+  const [savedJob, setSavedJob] = useState<Job[]>();
 
   useEffect(() => {
     const handleAllJobs = async () => {
@@ -41,7 +41,18 @@ const DashBody = () => {
         console.log(error);
       }
     };
+
+    const handleSavedJobs = async () => {
+      try {
+        const res = await savedJobs();
+        console.log(res);
+        setSavedJob(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     handleAllJobs();
+    handleSavedJobs();
   }, []);
   return (
     <div className="h-screen flex flex-col lg:flex-row">
@@ -109,19 +120,24 @@ const DashBody = () => {
               View All
             </Link>
           </div>
-
-          <JobCard
-            title="Job Title"
-            company="Company Name"
-            status="Status"
-            date="Date"
-          />
-          <JobCard
-            title="Job Title"
-            company="Company Name"
-            status="Status"
-            date="Date"
-          />
+          {savedJob?.length > 0 ? (
+            savedJob?.slice(0, 3).map(({ job }) => (
+              <JobCard
+                key={job.job_id}
+                id={job.job_id}
+                title={job.job_name}
+                location={job.location}
+                status={job.status}
+                date={new Date(job.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              />
+            ))
+          ) : (
+            <p>No saved job.</p>
+          )}
         </div>
       </div>
     </div>

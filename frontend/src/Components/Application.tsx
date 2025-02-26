@@ -4,7 +4,7 @@ import { FaBriefcase } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 import { IoIosDocument } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { allJobs } from "../Services/Endpont";
+import { allJobs, savedJobs } from "../Services/Endpont";
 import { Job } from "../interface/Interfaces";
 // Reusable JobCard component
 const JobCard = ({ id, title, location, status, date }) => {
@@ -95,7 +95,10 @@ const Application = () => {
         console.log(error);
       }
     };
+
+  
     handleAllJobs();
+    // handleSavedJobs();
   }, []);
   return (
     <div className="h-auto flex flex-col lg:flex-row">
