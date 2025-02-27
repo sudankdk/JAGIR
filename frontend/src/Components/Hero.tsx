@@ -1,6 +1,8 @@
 import { SearchBar } from "./SearchBar";
 
 export function Hero() {
+  
+
   return (
     <div className="relative bg-gradient-to-r bg-blue-800  text-black py-20">
       <div className="absolute inset-0 bg-black opacity-30"></div>
@@ -15,9 +17,8 @@ export function Hero() {
           </p>
           <div className="flex flex-col items-center justify-start ">
             {/* Added ml-auto to push the search bar to the right */}
-            <div>
-              <SearchBar
-                onSearch={(query, location) => console.log(query, location)}
+            <div >
+              <SearchBar 
               />
             </div>
           </div>

@@ -11,6 +11,7 @@ from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer
 import mimetypes
 from rest_framework.views import APIView
 from django.utils.decorators import method_decorator
+from fuzzywuzzy import process
 
 
 
@@ -303,7 +304,14 @@ def search_job_by_jobname(request,jobname):
 @api_view(['GET'])       
 def Search_by_location_name(request,jobname,location):
     try:
-        job=Job.objects.filter(job_name=jobname,location=location)
+        all_job=Job.objects.values_list('job_name','location')
+        job_matches=process.extract(jobname,[job[0] for job in all_job],limit=5)
+        location_matches=process.extract(location,[loc[1] for loc in all_job],limit=5)
+        
+        job_match_titles = [match[0] for match in job_matches]
+        location_match_titles = [match[0] for match in location_matches]
+        job=Job.objects.filter(job_name__in=job_match_titles,location__in=location_match_titles)
+        # job=Job.objects.filter(job_name=jobname,location=location)
         serializer=JobSerializer(job,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     except Exception as e:

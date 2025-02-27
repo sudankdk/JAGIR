@@ -109,4 +109,22 @@ export const savedJobs = async () => {
   }
 };
 
+export const Search_by_location_name = async (
+  jobname: string,
+  location: string
+) => {
+  try {
+    console.log(location, jobname);
+    const response = await api.get(`/search/job/${jobname}/${location}/`);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default useAxiosInterceptors;
+
+// path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),
+// path('search/job/<str:jobname>/',search_job_by_jobname,name="search-job-jobname"),
+// path('search/job/<str:jobname>/<str:location>/',Search_by_location_name,name="search-location-name"),
