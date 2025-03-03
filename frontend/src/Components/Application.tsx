@@ -3,13 +3,15 @@ import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { FaBriefcase } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 import { IoIosDocument } from "react-icons/io";
-import { Link } from "react-router-dom";
-import { allJobs, savedJobs } from "../Services/Endpont";
+// import { Link } from "react-router-dom";
+import { allJobs, applyJob, savedJobs } from "../Services/Endpont";
+import toast, { Toaster } from "react-hot-toast";
 import { Job } from "../interface/Interfaces";
 // Reusable JobCard component
 const JobCard = ({ id, title, location, status, date }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const [cvFile, setCvFile] = useState(null); // State to store CV file
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cvFile, setCvFile] = useState(null);
+  const [jobId, setJobId] = useState<string>("");
 
   const handleFileChange = (e: React.SyntheticEvent) => {
     const file = e.target.files[0];
@@ -18,21 +20,45 @@ const JobCard = ({ id, title, location, status, date }) => {
     }
   };
 
-  const handleApply = () => {
+  const uploadCV = async (id, cvFile) => {
+    try {
+      const data = await applyJob(id, cvFile);
+      console.log(data);
+    } catch (error) {
+      console.log("errror in uploading cv ", error);
+    }
+  };
+
+  const handleApply = async () => {
     if (!cvFile) {
-      alert("Please upload your CV before applying.");
-    } else {
-      alert(`You have applied for the job with CV: ${cvFile.name}`);
-      setIsModalOpen(false); // Close modal after applying
+      // alert("Please upload your CV before applying.");
+      toast.error("Please upload your CV before applying");
+      // console.log("notification ya aaunu parne ho");
+      return;
+    }
+    // alert(`You have applied for the job with CV: ${cvFile.name}`);
+
+    // toast.success(`You have applied for the job with CV: ${cvFile.name}`);
+    try {
+      await toast.promise(uploadCV(id, cvFile), {
+        loading: "Uploading...",
+        success: <b>Applied to job. </b>,
+        error: <b>Could not apply</b>,
+      });
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Upload failed:", error);
     }
   };
 
   return (
     <div
       id={id}
-      className="bg-slate-100 m-4 p-4 rounded-lg cursor-pointer shadow-sm hover:translate-x-1 transition-transform duration-200"
+      className="bg-slate-100 m-4 p-4 rounded-lg cursor-pointer shadow-sm " // hover:translate-x-1 transition-transform duration-200"
     >
-      <div className="flex justify-between items-center">
+      <Toaster position="top-right" reverseOrder={false} />
+
+      <div className="flex justify-between items-center hover:translate-x-1 transition-transform duration-200">
         <div>
           <h3 className="font-medium">{title}</h3>
           <p className="text-sm text-gray-600">{location}</p>
@@ -45,7 +71,10 @@ const JobCard = ({ id, title, location, status, date }) => {
 
       {/* Apply Button */}
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setIsModalOpen(true);
+          setJobId(id);
+        }}
         className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none"
       >
         Apply
@@ -96,7 +125,6 @@ const Application = () => {
       }
     };
 
-  
     handleAllJobs();
     // handleSavedJobs();
   }, []);
@@ -136,6 +164,7 @@ const Application = () => {
           {jobs?.length > 0 ? (
             jobs?.map((job) => (
               <JobCard
+                key={job.job_id}
                 id={job.job_id}
                 title={job.job_name}
                 location={job.location}

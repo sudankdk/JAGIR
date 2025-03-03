@@ -77,16 +77,11 @@ export const register = async (
 
 export const allJobs = async () => {
   try {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const response = await api.get("/job/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    // const token = localStorage.getItem("accessToken");
 
-      return response.data;
-    }
+    const response = await api.get("/job/");
+
+    return response.data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -120,6 +115,27 @@ export const Search_by_location_name = async (
     return response.data;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const applyJob = async (id: string, cv: File) => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    console.log(token);
+    if (token) {
+      const formData = new FormData();
+      formData.append("cv", cv);
+      const response = await api.post(`/job/apply/${id}/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
+      return response.data;
+    }
+  } catch (error) {
+    console.log("error in applying to job: ", error);
   }
 };
 

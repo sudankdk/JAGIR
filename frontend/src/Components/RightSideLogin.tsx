@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { FaBriefcase, FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../Services/Endpont";
-import { useAuth } from "../context/UseAuth"; // ✅ Import AuthContext
+import { useAuth } from "../context/UseAuth";
+import toast, { Toaster } from "react-hot-toast";
 
 const RightSideLogin = () => {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { auth_login } = useAuth(); // ✅ Get auth_login function
+  const { auth_login } = useAuth();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -21,7 +22,7 @@ const RightSideLogin = () => {
     try {
       const data = await login(username, password);
       if (data.success) {
-        auth_login({ username }); // ✅ Save user in AuthContext
+        auth_login({ username });
         navigate(`/Dashboard`);
       } else {
         alert("Invalid username or password");
@@ -29,6 +30,12 @@ const RightSideLogin = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleToast = () => {
+    toast.success("Login ScuccessFull");
+    toast.error("Login Failed");
+    <Toaster position="top-right" />;
   };
 
   return (
@@ -77,6 +84,7 @@ const RightSideLogin = () => {
           <button
             type="submit"
             className="w-full py-3 mt-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
+            onClick={handleToast}
           >
             Log In
           </button>

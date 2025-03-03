@@ -138,7 +138,6 @@ const JobDescription = () => {
       ) : (
         <p>No Job Description</p>
       )}
-      );
     </div>
   );
 };
