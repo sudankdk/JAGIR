@@ -8,7 +8,7 @@ import { allJobs, savedJobs } from "../Services/Endpont";
 import { Job } from "../interface/Interfaces";
 
 // Reusable JobCard component
-const JobCard = ({ id, title, location, status, date }) => {
+export const JobCard = ({ id, title, location, status, date }) => {
   return (
     <div
       id={id}

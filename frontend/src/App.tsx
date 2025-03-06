@@ -9,6 +9,7 @@ import Bookmarks from "./Components/Bookmark";
 import { AuthProvider } from "./context/UseAuth";
 import { PrivateRoute } from "./private/PrivateRoute.js";
 import JobDescription from "./Pages/JobDescription.js";
+import DashboardJG from "./Pages/DashboardJG.js";
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
             element={<PrivateRoute element={<Bookmarks />} />}
           />
           <Route path="/job/description" element={<JobDescription />} />
+
+          {/* temporariry ko lagi*/}
+          <Route path="/dash" element={<DashboardJG />} />
         </Routes>
       </Router>
     </AuthProvider>

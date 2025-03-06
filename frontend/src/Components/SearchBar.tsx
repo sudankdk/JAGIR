@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import { Search_by_location_name } from "../Services/Endpont";
+import { useBoolean } from "../context/UseBoolean";
 
-export function SearchBar() {
+export function SearchBar({ sendDataToParent }) {
   const [jobname, setJobName] = useState("");
   const [location, setLocation] = useState("");
+  const { toggleValue } = useBoolean();
 
   const hadndlesearchByLocationAndName = async (jobname, location) => {
     // e.preventDefault();
     console.log("click vayo search");
+    toggleValue();
     const response = await Search_by_location_name(jobname, location);
-    console.log(response);
+    sendDataToParent(response);
     return response;
   };
 
