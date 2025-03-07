@@ -13,6 +13,11 @@ from rest_framework.views import APIView
 from django.utils.decorators import method_decorator
 from fuzzywuzzy import process
 
+from django.contrib.auth.models import Group,Permission
+
+
+
+#Group banaune
 
 
 from rest_framework_simplejwt.views import (
@@ -79,22 +84,36 @@ class CustomLogin(TokenObtainPairView):
         tokens=response.data
         access_tokens=tokens['access']
         refresh_tokens=tokens['refresh']
+        role = user.groups.first().name if user.groups.exists() else "No Role"
         
         return Response({
             'success': True,
             'access_token': access_tokens,
             'refresh_token': refresh_tokens,
             'username': user.username,  
+            'role':role,
         }, status=status.HTTP_200_OK)
 
     
 @api_view(['POST'])
 def register(request):
-    serializer=RegisterUserSerializer(data=request.data)
+    user_data=request.data
+    
+    role = user_data.get("role")
+    if role not in ["JG", "JS"]:
+        return Response({"error": "Invalid Role"}, status=400)
+    
+    serializer = RegisterUserSerializer(data=user_data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
+        user = serializer.save()  
+
+        group, _ = Group.objects.get_or_create(name=role)
+
+        user.groups.add(group)
+
+        return Response(serializer.data, status=201)
     return Response({"error":"Not Valid Regsiter"})
+
 
 
 @api_view(['POST'])
