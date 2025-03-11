@@ -4,7 +4,7 @@ import { FaBriefcase } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 import { IoIosDocument } from "react-icons/io";
 // import { Link } from "react-router-dom";
-import { allJobs, applyJob, savedJobs } from "../Services/Endpont";
+import { allJobs, applyJob, savedJobs } from "../API/Endpont";
 import toast, { Toaster } from "react-hot-toast";
 import { Job } from "../interface/Interfaces";
 // Reusable JobCard component

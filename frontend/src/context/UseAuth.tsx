@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   const auth_login = (userData: User) => {
-    localStorage.setItem("username", JSON.stringify(userData)); // ✅ Fixed `setItem`
+    localStorage.setItem("username", JSON.stringify(userData)); 
     setUser(userData);
   };
 

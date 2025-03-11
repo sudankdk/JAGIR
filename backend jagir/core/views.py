@@ -84,8 +84,7 @@ class CustomLogin(TokenObtainPairView):
         tokens=response.data
         access_tokens=tokens['access']
         refresh_tokens=tokens['refresh']
-        role = user.groups.first().name if user.groups.exists() else "No Role"
-        
+        role = user.role
         return Response({
             'success': True,
             'access_token': access_tokens,

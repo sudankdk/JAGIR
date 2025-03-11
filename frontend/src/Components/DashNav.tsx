@@ -1,8 +1,13 @@
 import { IoIosNotifications } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
+import { useAuth } from "../context/UseAuth";
+
+
 
 const DashNav = () => {
+  const {user}=useAuth()
   const getname = () => {
+    console.log(user?.profile_image)
     const nameobject = localStorage.getItem("username");
     if (nameobject) {
       const name = JSON.parse(nameobject);
@@ -10,6 +15,7 @@ const DashNav = () => {
     }
     return null;
   };
+ 
   return (
     <div className="flex justify-between items-center px-8 py-4 border-b-2 border-gray-300 bg-white">
       {/* Left Section */}
@@ -34,7 +40,7 @@ const DashNav = () => {
 
         {/* Profile Picture */}
         <img
-          src="https://via.placeholder.com/40"
+          src={'/api/'+user?.profile_image || "/default-profile.png"}
           alt="Profile"
           className="w-10 h-10 rounded-full border-2 border-blue-500"
         />
