@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import { register } from "../Services/Endpont";
+import { register } from "../API/Endpont";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");

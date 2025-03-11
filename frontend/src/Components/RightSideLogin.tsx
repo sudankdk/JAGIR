@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { FaBriefcase, FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../Services/Endpont";
+import { login } from "../API/Endpont";
 import { useAuth } from "../context/UseAuth";
 import toast, { Toaster } from "react-hot-toast";
+
+
 
 const RightSideLogin = () => {
   const [username, setUserName] = useState<string>("");
@@ -11,6 +13,8 @@ const RightSideLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { auth_login } = useAuth();
+
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -22,8 +26,15 @@ const RightSideLogin = () => {
     try {
       const data = await login(username, password);
       if (data.success) {
-        auth_login({ username });
-        navigate(`/Dashboard`);
+        if(data.role==="JG")
+        {
+          auth_login({ username });
+          navigate(`/dash`);
+        }else 
+        {
+          auth_login({ username});
+           navigate(`/Dashboard`);
+        }
       } else {
         alert("Invalid username or password");
       }

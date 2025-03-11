@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { allJobs } from "../Services/Endpont";
+import { allJobs } from "../API/Endpont";
 import { Job } from "../interface/Interfaces";
 import React from "react";
 

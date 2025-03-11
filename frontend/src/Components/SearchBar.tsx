@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
-import { Search_by_location_name } from "../Services/Endpont";
+import { Search_by_location_name } from "../API/Endpont";
 import { useBoolean } from "../context/UseBoolean";
 
 export function SearchBar({ sendDataToParent }) {
