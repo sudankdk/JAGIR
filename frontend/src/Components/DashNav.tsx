@@ -1,13 +1,18 @@
 import { IoIosNotifications } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
-import { useAuth } from "../context/UseAuth";
+import { userInfo } from "../API/Endpont";
+import { useEffect, useState } from "react";
+import { SERVER_URL } from "../API/Server";
 
 
 
 const DashNav = () => {
-  const {user}=useAuth()
+  const [pp,setPP]=useState<string>("")
+  const userData=async()=>{
+    const data=await userInfo();
+    setPP(data.profile_image)
+  }
   const getname = () => {
-    console.log(user?.profile_image)
     const nameobject = localStorage.getItem("username");
     if (nameobject) {
       const name = JSON.parse(nameobject);
@@ -15,7 +20,10 @@ const DashNav = () => {
     }
     return null;
   };
- 
+  useEffect(()=>{
+    userData()
+    console.log(pp)
+  },[])
   return (
     <div className="flex justify-between items-center px-8 py-4 border-b-2 border-gray-300 bg-white">
       {/* Left Section */}
@@ -40,7 +48,7 @@ const DashNav = () => {
 
         {/* Profile Picture */}
         <img
-          src={'/api/'+user?.profile_image || "/default-profile.png"}
+          src={`${SERVER_URL}`+pp || "/default-profile.png"}
           alt="Profile"
           className="w-10 h-10 rounded-full border-2 border-blue-500"
         />

@@ -139,6 +139,24 @@ export const applyJob = async (id: string, cv: File) => {
   }
 };
 
+
+export const userInfo= async()=>{
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    if(token){
+      const response = await api.get("/user/",{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }});
+    return response.data
+    }
+    
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),

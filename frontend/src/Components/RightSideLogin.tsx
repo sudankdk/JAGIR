@@ -5,16 +5,12 @@ import { login } from "../API/Endpont";
 import { useAuth } from "../context/UseAuth";
 import toast, { Toaster } from "react-hot-toast";
 
-
-
 const RightSideLogin = () => {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { auth_login } = useAuth();
-
-  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -26,14 +22,12 @@ const RightSideLogin = () => {
     try {
       const data = await login(username, password);
       if (data.success) {
-        if(data.role==="JG")
-        {
+        if (data.role === "JG") {
           auth_login({ username });
           navigate(`/dash`);
-        }else 
-        {
-          auth_login({ username});
-           navigate(`/Dashboard`);
+        } else {
+          auth_login({ username });
+          navigate(`/Dashboard`);
         }
       } else {
         alert("Invalid username or password");
