@@ -15,6 +15,7 @@ from fuzzywuzzy import process
 
 from django.contrib.auth.models import Group,Permission
 
+from drf_yasg.utils import swagger_auto_schema
 
 
 #Group banaune
@@ -93,7 +94,10 @@ class CustomLogin(TokenObtainPairView):
             'role':role,
         }, status=status.HTTP_200_OK)
 
-    
+@swagger_auto_schema(
+    method='post', 
+    operation_description="This endpoint registers user credentials and and put it in respective group"
+) 
 @api_view(['POST'])
 def register(request):
     user_data=request.data
