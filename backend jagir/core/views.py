@@ -357,3 +357,14 @@ class SavedJobs(APIView):
         except Exception as e:
             return Response({"not saved":"job not saved in bookmars",
                             "error":str(e)},status=status.HTTP_400_BAD_REQUEST)
+            
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])      
+def user_info(request):
+    try:
+        user=MyUser.objects.get(username=request.user)
+        serializer=MyUserSerializer(user)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"Failed":"user info not provided",
+                         "errot":str(e)},status=status.HTTP_400_BAD_REQUEST)
