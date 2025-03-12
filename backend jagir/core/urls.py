@@ -15,6 +15,8 @@ urlpatterns = [
     #job
     path('job/create/',create_job,name="Create_job"),
     path('job/',get_job,name="get_job"),
+    
+    #crud job
     path('job/delete/<str:id>/',delete_job,name="delete_job"),
     path('job/close/<str:id>/',close_job,name="close_job"),
     
