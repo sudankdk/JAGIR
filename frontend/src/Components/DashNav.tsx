@@ -4,14 +4,12 @@ import { userInfo } from "../API/Endpont";
 import { useEffect, useState } from "react";
 import { SERVER_URL } from "../API/Server";
 
-
-
 const DashNav = () => {
-  const [pp,setPP]=useState<string>("")
-  const userData=async()=>{
-    const data=await userInfo();
-    setPP(data.profile_image)
-  }
+  const [pp, setPP] = useState<string>("");
+  const userData = async () => {
+    const data = await userInfo();
+    setPP(data.profile_image);
+  };
   const getname = () => {
     const nameobject = localStorage.getItem("username");
     if (nameobject) {
@@ -20,10 +18,10 @@ const DashNav = () => {
     }
     return null;
   };
-  useEffect(()=>{
-    userData()
-    console.log(pp)
-  },[])
+  useEffect(() => {
+    userData();
+    console.log(pp);
+  }, []);
   return (
     <div className="flex justify-between items-center px-8 py-4 border-b-2 border-gray-300 bg-white">
       {/* Left Section */}
@@ -48,9 +46,9 @@ const DashNav = () => {
 
         {/* Profile Picture */}
         <img
-          src={`${SERVER_URL}`+pp || "/default-profile.png"}
+          className="h-14 w-14 rounded-full border-2  border-blue-500"
+          src={`${SERVER_URL}` + pp || "/default-profile.png"}
           alt="Profile"
-          className="w-10 h-10 rounded-full border-2 border-blue-500"
         />
 
         {/* Username */}

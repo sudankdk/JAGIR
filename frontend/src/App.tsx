@@ -10,6 +10,7 @@ import { AuthProvider } from "./context/UseAuth";
 import { PrivateRoute } from "./private/PrivateRoute.js";
 import JobDescription from "./Pages/JobDescription.js";
 import DashboardJG from "./Pages/DashboardJG.js";
+import JobApplicant from "./Pages/JobApplicant.js";
 
 function App() {
   return (
@@ -33,8 +34,9 @@ function App() {
           />
           <Route path="/job/description" element={<JobDescription />} />
 
-          {/* temporariry ko lagi*/}
-          <Route path="/dash" element={<DashboardJG />} />
+          {/* yes lai authorize ganai xa*/}
+          <Route path="/JG/dashboard" element={<DashboardJG />} />
+          <Route path="/JG/applicant" element={<JobApplicant />} />
         </Routes>
       </Router>
     </AuthProvider>
