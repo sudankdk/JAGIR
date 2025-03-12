@@ -24,7 +24,7 @@ const RightSideLogin = () => {
       if (data.success) {
         if (data.role === "JG") {
           auth_login({ username });
-          navigate(`/dash`);
+          navigate(`/JG/dashboard`);
         } else {
           auth_login({ username });
           navigate(`/Dashboard`);
