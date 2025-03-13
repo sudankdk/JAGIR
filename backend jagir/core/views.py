@@ -16,7 +16,7 @@ from fuzzywuzzy import process
 from django.contrib.auth.models import Group,Permission
 
 from drf_yasg.utils import swagger_auto_schema
-
+from django.db import connection
 
 #Group banaune
 
@@ -147,7 +147,9 @@ def create_job(request):
 # @permission_classes([IsAuthenticated])
 def get_job(request):
     try:
-        jobs= Job.objects.all()
+        # jobs= Job.objects.all()
+
+        jobs= Job.objects.select_related("user")
         serializer= JobSerializer(jobs,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     except:
@@ -207,12 +209,13 @@ def get_applicant(request):
         try:
             user_role=request.user.role
             if user_role=="JG":
-                applicant=JobApplication.objects.all()
+                # applicant=JobApplication.objects.all()
+                applicant=JobApplication.objects.select_related('job','applicant').all()
                 serializer=JobApplicantSerializer(applicant,many=True)
                 return Response(serializer.data,status=status.HTTP_200_OK)
             return Response({"error":"Only Job Giver can see applicant"},status=status.HTTP_403_FORBIDDEN)
-        except:
-            return Response({"error":"Error in getting jobs"},status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error":f"Error in getting jobs, {str(e)}"},status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

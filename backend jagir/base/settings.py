@@ -215,3 +215,15 @@ LOGGING = {
         },
     },
 }
+
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Enter token as: Bearer <your_token>"
+        }
+    }
+}
