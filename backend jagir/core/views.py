@@ -12,8 +12,10 @@ import mimetypes
 from rest_framework.views import APIView
 from django.utils.decorators import method_decorator
 from fuzzywuzzy import process
+from django.utils.decorators import method_decorator
 
 from django.contrib.auth.models import Group,Permission
+from django.views.decorators.cache import cache_page
 
 from drf_yasg.utils import swagger_auto_schema
 from django.db import connection
@@ -142,18 +144,28 @@ def create_job(request):
             {"error": "User role not found."}, 
             status=status.HTTP_400_BAD_REQUEST
         )
-    
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def get_job(request):
-    try:
-        # jobs= Job.objects.all()
+from django.core.cache import cache
+import logging
 
-        jobs= Job.objects.select_related("user")
-        serializer= JobSerializer(jobs,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
-    except:
-        return Response({"error":"Error in getting jobs"},status=status.HTTP_400_BAD_REQUEST)
+logger = logging.getLogger(__name__)
+
+@cache_page(60 * 15)
+@api_view(['GET'])
+def get_job(request):
+    print("hello")
+    cache_key = "jobs_cache_key"
+    
+    cached_jobs = cache.get(cache_key)
+    if cached_jobs:
+        logger.info("Cache HIT")
+        return Response(cached_jobs, status=status.HTTP_200_OK)
+
+    logger.info("Cache MISS")
+    jobs = Job.objects.select_related("user")
+    serializer = JobSerializer(jobs, many=True)
+    cache.set(cache_key, serializer.data, timeout=900)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
     
 
 
