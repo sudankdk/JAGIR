@@ -1,1 +1,54 @@
-./debug.log
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+*.egg-info/
+*.egg
+.Python
+
+# Django-specific files
+db.sqlite3
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+
+# Secret and environment variables
+.env
+config/settings/local.py
+config/.env
+
+# Migrations (optional, but recommended to keep migrations)
+**/migrations/*
+
+# Logs and debugging files
+logs/
+*.log
+debug.log
+coverage.xml
+nosetests.xml
+reports/
+
+# Static files (optional, if managed by collectstatic)
+staticfiles/
+media/
+
+# VS Code / JetBrains / Other IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Node.js (if using React in the frontend within the same repo)
+node_modules/
