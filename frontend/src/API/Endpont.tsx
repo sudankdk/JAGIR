@@ -139,26 +139,38 @@ export const applyJob = async (id: string, cv: File) => {
   }
 };
 
-
-export const userInfo= async()=>{
+export const userInfo = async () => {
   const token = localStorage.getItem("accessToken");
 
   try {
-    if(token){
-      const response = await api.get("/user/",{
+    if (token) {
+      const response = await api.get("/user/", {
         headers: {
           Authorization: `Bearer ${token}`,
-        }});
-    return response.data
+        },
+      });
+      return response.data;
     }
-    
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
+export const jobApplicant = async () => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    const response = await api.get("/job/applicant/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+};
 
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),
 // path('search/job/<str:jobname>/',search_job_by_jobname,name="search-job-jobname"),
 // path('search/job/<str:jobname>/<str:location>/',Search_by_location_name,name="search-location-name"),
+// path('job/applicant/',get_applicant,name="get_applicant"),

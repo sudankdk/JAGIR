@@ -220,11 +220,20 @@ def apply_job(request, id):
 def get_applicant(request):
         try:
             user_role=request.user.role
+            user=str(request.user)
+            print(user,user_role)
+            empt_arr=[]
             if user_role=="JG":
                 # applicant=JobApplication.objects.all()
                 applicant=JobApplication.objects.select_related('job','applicant').all()
                 serializer=JobApplicantSerializer(applicant,many=True)
-                return Response(serializer.data,status=status.HTTP_200_OK)
+                for data in serializer.data:
+                    job_user=data['job'].get('user',{})
+                    if job_user and job_user.get('username') == user:
+                        empt_arr.append(data)
+                    # print(empt_arr)
+                return Response(empt_arr,status=status.HTTP_200_OK)
+                     
             return Response({"error":"Only Job Giver can see applicant"},status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({"error":f"Error in getting jobs, {str(e)}"},status=status.HTTP_400_BAD_REQUEST)
