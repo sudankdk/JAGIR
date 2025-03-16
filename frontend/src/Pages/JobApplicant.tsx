@@ -20,7 +20,7 @@ const JobApplicant = () => {
     <div>
       <div>
         {/* yo dash ko side nav ho*/}
-        <div className="h-full flex flex-col lg:flex-row">
+        <div className="min-h-screen flex flex-col lg:flex-row">
           {/* Left Side Navigation */}
           <div className="w-full lg:w-1/5 bg-blue-800 text-white p-8">
             <nav className="space-y-6">
@@ -50,6 +50,7 @@ const JobApplicant = () => {
                   cv={job.cv}
                   status={job.application_status}
                   profile={job.applicant.profile_image}
+                  job_name={job.job.job_name}
                 />
               ))
             ) : (

@@ -3,7 +3,7 @@ import { IoMdDownload } from "react-icons/io";
 import { MdOutlinePreview } from "react-icons/md";
 import { SERVER_URL } from "../API/Server";
 
-const Applicant = ({ id, profile, name, cv, status }) => {
+const Applicant = ({ id, profile, name, cv, status, job_name }) => {
   const theme: { [key: string]: string } = {
     ACCEPTED: "text-green-600",
     PENDING: "text-yellow-600",
@@ -36,23 +36,24 @@ const Applicant = ({ id, profile, name, cv, status }) => {
   const [colo, setColo] = useState<string>("");
   useEffect(() => {
     setColo(theme[status]);
-    console.log(id, profile, name, cv, status);
   }, []);
   return (
     <div className="w-full bg-slate-200 text-black p-4 rounded-lg shadow-md">
       <div
-        className="grid grid-cols-2 items-center text-center py-4 px-6 bg-white rounded-md shadow-sm hover:shadow-lg transition-shadow"
+        className="grid grid-cols-3  items-center text-center py-4 px-6 bg-white rounded-md shadow-sm hover:shadow-lg transition-shadow"
         key={id}
       >
         {/* Profile Picture */}
-        <div className="flex items-center justify-center">
+        <div className="flex items-center gap-3 justify-center">
           <img
             className="h-14 w-14 rounded-full border-2 border-gray-300"
             src={`${SERVER_URL}` + profile || "/default-profile.png"}
             alt="Profile"
           />
+          <div className="text-lg font-semibold">{name}</div>
         </div>
-        <div className="text-lg font-semibold">{name}</div>
+        {/* <div className="text-lg font-semibold">{name}</div> */}
+        <div className="text-lg font-semibold">{job_name}</div>
       </div>
       <div className="grid grid-cols-2 items-center text-center py-4 px-6 bg-white rounded-md shadow-sm hover:shadow-lg transition-shadow">
         {/* Name */}

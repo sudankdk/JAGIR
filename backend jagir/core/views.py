@@ -221,7 +221,6 @@ def get_applicant(request):
         try:
             user_role=request.user.role
             user=str(request.user)
-            print(user,user_role)
             empt_arr=[]
             if user_role=="JG":
                 # applicant=JobApplication.objects.all()
