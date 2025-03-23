@@ -13,9 +13,12 @@ const Navbar = () => {
             </span>
           </div>
           <div className="hidden md:flex items-center space-x-6">
-            <a href="#" className="text-gray-600 hover:text-blue-600">
+            <Link
+              to="/job/description"
+              className="text-gray-600 hover:text-blue-600"
+            >
               Find Jobs
-            </a>
+            </Link>
             <a href="#" className="text-gray-600 hover:text-blue-600">
               Companies
             </a>

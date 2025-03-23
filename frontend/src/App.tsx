@@ -11,6 +11,7 @@ import { PrivateRoute } from "./private/PrivateRoute.js";
 import JobDescription from "./Pages/JobDescription.js";
 import DashboardJG from "./Pages/DashboardJG.js";
 import JobApplicant from "./Pages/JobApplicant.js";
+import Profile from "./Pages/Profile.js";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           {/* yes lai authorize ganai xa*/}
           <Route path="/JG/dashboard" element={<DashboardJG />} />
           <Route path="/JG/applicant" element={<JobApplicant />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </AuthProvider>

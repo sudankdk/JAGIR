@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view,permission_classes
+from rest_framework.decorators import api_view,permission_classes,throttle_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 
 from django.contrib.auth.models import Group,Permission
 from django.views.decorators.cache import cache_page
-
+from rest_framework.throttling import UserRateThrottle
 from drf_yasg.utils import swagger_auto_schema
 from django.db import connection
 
@@ -151,6 +151,7 @@ logger = logging.getLogger(__name__)
 
 @cache_page(60 * 15)
 @api_view(['GET'])
+@throttle_classes([UserRateThrottle])
 def get_job(request):
     print("hello")
     cache_key = "jobs_cache_key"
@@ -189,6 +190,7 @@ def delete_job(request,id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def apply_job(request, id):
     try:
         applicant_role = request.user.role
