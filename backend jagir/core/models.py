@@ -15,6 +15,13 @@ class MyUser(AbstractUser):
     bio = models.TextField(blank=True)
     profile_image = models.ImageField(upload_to='profile_image/', blank=True, null=True)
     role = models.CharField(max_length=10, choices=ROLES)
+    title=models.CharField(max_length=255,blank=True,null=True)
+    portfolio=models.URLField(blank=True, null=True)
+    github=models.URLField(blank=True,null=True)
+    x=models.URLField(blank=True,null=True)
+    skills=models.CharField(blank=True,null=True,max_length=200)
+    location=models.CharField(max_length=255,blank=True,null=True)
+    
 
     def __str__(self):
         return self.username

@@ -16,9 +16,12 @@ import {
   Check,
 } from "lucide-react";
 import { userInfo } from "../API/Endpont";
+import { SERVER_URL } from "../API/Server";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [pp, setPP] = useState("");
+  const [dateJoined, setDateJoined] = useState("");
   const [formData, setFormData] = useState({
     name: "Ram Ram Ramm",
     title: "Senior Software Engineer",
@@ -54,10 +57,31 @@ const Profile = () => {
   };
 
   const handleProfielData = async () => {
-    const data = await userInfo();
-    setFormData["name"] = data.name;
-    setFormData["title"] = data.role;
-    console.log(data);
+    try {
+      const data = await userInfo();
+      setPP(data.profile_image);
+      const a = new Date(data.date_joined).toLocaleDateString();
+      setDateJoined(a);
+
+      setFormData((prev) => ({
+        ...prev,
+        name: data.username || prev.name,
+        about: data.bio || prev.about,
+        email: data.email || prev.email,
+        github: data.github || prev.github,
+        location: data.location || prev.location,
+        twitter: data.x || prev.twitter,
+        skills: data.skills
+          ? data.skills.split(",").map((s) => s.trim())
+          : prev.skills,
+        title: data.title || prev.title,
+        portfolio: data.portfolio || prev.portfolio,
+      }));
+
+      console.log("Profile Data:", data);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
   };
 
   const handleSave = () => {
@@ -76,7 +100,7 @@ const Profile = () => {
           <div className="h-48 w-full rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 mb-16"></div>
           <div className="absolute -bottom-12 left-8">
             <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80"
+              src={`${SERVER_URL}` + pp}
               alt="Profile"
               className="h-32 w-32 rounded-full border-4 border-white shadow-lg"
             />
@@ -123,7 +147,7 @@ const Profile = () => {
                   </span>
                   <span className="flex items-center text-gray-600">
                     <Calendar className="w-4 h-4 mr-1" />
-                    Joined March 2022
+                    {dateJoined}
                   </span>
                 </div>
               </>
