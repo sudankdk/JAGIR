@@ -1,34 +1,72 @@
-import React, { useState } from 'react';
-import { User, MapPin, Calendar, Link as LinkIcon, Mail, Github as GitHub, Twitter, Award, BookOpen, Users, Activity, Edit, X, Check } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import {
+  User,
+  MapPin,
+  Calendar,
+  Link as LinkIcon,
+  Mail,
+  Github as GitHub,
+  Twitter,
+  Award,
+  BookOpen,
+  Users,
+  Activity,
+  Edit,
+  X,
+  Check,
+} from "lucide-react";
+import { userInfo } from "../API/Endpont";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: 'Sarah Anderson',
-    title: 'Senior Software Engineer',
-    location: 'San Francisco, CA',
-    email: 'sarah.anderson@example.com',
-    portfolio: 'portfolio.dev/sarah',
-    github: '@sarahdev',
-    twitter: '@sarahcodes',
-    about: 'Passionate software engineer with 8+ years of experience in full-stack development. Specialized in React, Node.js, and cloud architecture. Leading technical initiatives and mentoring junior developers. Always excited to learn and share knowledge with the community.',
-    skills: ['React', 'TypeScript', 'Node.js', 'AWS', 'GraphQL', 'Docker', 'PostgreSQL', 'Redis']
+    name: "Ram Ram Ramm",
+    title: "Senior Software Engineer",
+    location: "San Francisco, CA",
+    email: "sarah.anderson@example.com",
+    portfolio: "portfolio.dev/sarah",
+    github: "@sarahdev",
+    twitter: "@sarahcodes",
+    about:
+      "Passionate software engineer with 8+ years of experience in full-stack development. Specialized in React, Node.js, and cloud architecture. Leading technical initiatives and mentoring junior developers. Always excited to learn and share knowledge with the community.",
+    skills: [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "AWS",
+      "GraphQL",
+      "Docker",
+      "PostgreSQL",
+      "Redis",
+    ],
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const skills = e.target.value.split(',').map(skill => skill.trim());
-    setFormData(prev => ({ ...prev, skills }));
+    const skills = e.target.value.split(",").map((skill) => skill.trim());
+    setFormData((prev) => ({ ...prev, skills }));
+  };
+
+  const handleProfielData = async () => {
+    const data = await userInfo();
+    setFormData["name"] = data.name;
+    setFormData["title"] = data.role;
+    console.log(data);
   };
 
   const handleSave = () => {
     setIsEditing(false);
     // Here you would typically save to a backend
   };
+  useEffect(() => {
+    handleProfielData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -74,7 +112,9 @@ const Profile = () => {
               </div>
             ) : (
               <>
-                <h1 className="text-3xl font-bold text-gray-900">{formData.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {formData.name}
+                </h1>
                 <p className="text-gray-600 mt-1">{formData.title}</p>
                 <div className="flex items-center gap-4 mt-4">
                   <span className="flex items-center text-gray-600">
@@ -171,12 +211,17 @@ const Profile = () => {
               <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
               <div className="space-y-4">
                 {[1, 2, 3].map((_, i) => (
-                  <div key={i} className="flex items-start gap-4 pb-4 border-b last:border-0">
+                  <div
+                    key={i}
+                    className="flex items-start gap-4 pb-4 border-b last:border-0"
+                  >
                     <div className="rounded-full bg-blue-100 p-2">
                       <Award className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium">Completed Advanced React Course</p>
+                      <p className="font-medium">
+                        Completed Advanced React Course
+                      </p>
                       <p className="text-sm text-gray-500">2 days ago</p>
                     </div>
                   </div>
@@ -188,7 +233,9 @@ const Profile = () => {
           {/* Right Column */}
           <div>
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+              <h2 className="text-xl font-semibold mb-4">
+                Contact Information
+              </h2>
               <div className="space-y-3">
                 {isEditing ? (
                   <>
@@ -241,15 +288,21 @@ const Profile = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <LinkIcon className="w-5 h-5 text-gray-400" />
-                      <a href="#" className="text-blue-600 hover:underline">{formData.portfolio}</a>
+                      <a href="#" className="text-blue-600 hover:underline">
+                        {formData.portfolio}
+                      </a>
                     </div>
                     <div className="flex items-center gap-3">
                       <GitHub className="w-5 h-5 text-gray-400" />
-                      <a href="#" className="text-blue-600 hover:underline">{formData.github}</a>
+                      <a href="#" className="text-blue-600 hover:underline">
+                        {formData.github}
+                      </a>
                     </div>
                     <div className="flex items-center gap-3">
                       <Twitter className="w-5 h-5 text-gray-400" />
-                      <a href="#" className="text-blue-600 hover:underline">{formData.twitter}</a>
+                      <a href="#" className="text-blue-600 hover:underline">
+                        {formData.twitter}
+                      </a>
                     </div>
                   </>
                 )}
@@ -262,7 +315,7 @@ const Profile = () => {
                 <input
                   type="text"
                   name="skills"
-                  value={formData.skills.join(', ')}
+                  value={formData.skills.join(", ")}
                   onChange={handleSkillsChange}
                   className="w-full border rounded px-2 py-1"
                   placeholder="Separate skills with commas"

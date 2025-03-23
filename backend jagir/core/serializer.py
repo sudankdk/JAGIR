@@ -7,7 +7,7 @@ class MyUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=MyUser
-        fields = ['username','bio','role','profile_image' ]
+        fields = ['username','bio','role','profile_image','date_joined' ] #skills , achivements, contact indfos
 
 
 

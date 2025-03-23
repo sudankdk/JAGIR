@@ -168,6 +168,10 @@ export const jobApplicant = async () => {
   }
 };
 
+export const user =async()=>{
+  
+}
+
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),
