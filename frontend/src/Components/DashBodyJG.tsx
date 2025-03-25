@@ -6,7 +6,7 @@ import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { FaBriefcase } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
 import { Chart } from "./Chart";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const DashBodyJG = () => {
   const nav = useNavigate();
   const RedirectToLogin = () => {
@@ -22,7 +22,9 @@ const DashBodyJG = () => {
           <nav className="space-y-6">
             <div className="flex items-center space-x-4 bg-blue-600 text-white p-4 rounded-lg cursor-pointer">
               <HiOutlineSquares2X2 className="text-2xl" />
-              <h2 className="text-lg font-semibold">Overview</h2>
+              <h2 className="text-lg font-semibold">
+                <Link to="/JG/dashboard">Overview</Link>{" "}
+              </h2>
             </div>
 
             <div

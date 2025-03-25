@@ -1,13 +1,15 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,shortlist_applicant,reject_applicant,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name,user_info
+from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,shortlist_applicant,reject_applicant,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name,user_info,CustomLogoutView
 
 
 urlpatterns = [
     #auth
     path('login/',CustomLogin.as_view(),name="Login"),
     path('register/',register,name="Register"),
+    path('logout/', CustomLogoutView.as_view(), name="logout"),
+
     
     #user
     path('user/',user_info),

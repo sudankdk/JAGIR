@@ -7,6 +7,7 @@ import { IoIosDocument } from "react-icons/io";
 import { allJobs, applyJob, savedJobs } from "../API/Endpont";
 import toast, { Toaster } from "react-hot-toast";
 import { Job } from "../interface/Interfaces";
+import { Link } from "react-router-dom";
 // Reusable JobCard component
 const JobCard = ({ id, title, location, status, date }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -135,17 +136,25 @@ const Application = () => {
         <nav className="space-y-6">
           <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
             <HiOutlineSquares2X2 className="text-2xl" />
-            <h2 className="text-lg font-semibold">Overview</h2>
+            <h2 className="text-lg font-semibold">
+              {" "}
+              <Link to="/Dashboard">Overview</Link>
+            </h2>
           </div>
 
           <div className="flex items-center space-x-4 bg-blue-600 text-white p-4 rounded-lg cursor-pointer">
             <FaBriefcase className="text-2xl" />
-            <h2 className="text-lg font-semibold">Applications</h2>
+            <h2 className="text-lg font-semibold">
+              {" "}
+              <Link to="/Dashboard/application">Applications</Link>
+            </h2>
           </div>
 
           <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
             <CiBookmark className="text-2xl" />
-            <h2 className="text-lg font-semibold">Saved Jobs</h2>
+            <h2 className="text-lg font-semibold">
+              <Link to="/Dashboard/bookmarks">Saved Jobs</Link>
+            </h2>
           </div>
 
           <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">

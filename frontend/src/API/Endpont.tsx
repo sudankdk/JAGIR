@@ -168,8 +168,11 @@ export const jobApplicant = async () => {
   }
 };
 
-export const user =async()=>{
-  
+export const logout =async ()=>{
+  const token = localStorage.getItem("accessToken");
+  if(token){
+    const response = await api.get("api.logout")
+  }
 }
 
 export default useAxiosInterceptors;
