@@ -9,6 +9,9 @@ import { Chart } from "./Chart";
 import { Link, useNavigate } from "react-router-dom";
 const DashBodyJG = () => {
   const nav = useNavigate();
+  const redirectToJob = () => {
+    nav("/job/post");
+  };
   const RedirectToLogin = () => {
     nav("/JG/applicant");
   };
@@ -47,7 +50,10 @@ const DashBodyJG = () => {
           <div className="m-2 p-4 bg-white shadow rounded-lg">
             <div className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
               <h2 className="text-lg font-medium text-gray-800">Dashboard</h2>
-              <button className="bg-blue-600 px-4 py-2 text-white rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-300">
+              <button
+                className="bg-blue-600 px-4 py-2 text-white rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-300"
+                onClick={redirectToJob}
+              >
                 Post Job
               </button>
             </div>

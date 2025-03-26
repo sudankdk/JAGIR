@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,update_applicant_status,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name,user_info,logout
+from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,update_applicant_status,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name,user_info,logout,job_opening             
 
 
 urlpatterns = [
@@ -21,6 +21,7 @@ urlpatterns = [
     #crud job
     path('job/delete/<str:id>/',delete_job,name="delete_job"),
     path('job/close/<str:id>/',close_job,name="close_job"),
+    path('job/opening/',job_opening),
     
     
     #applicant

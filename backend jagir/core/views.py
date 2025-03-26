@@ -444,3 +444,15 @@ def user_info(request):
     except Exception as e:
         return Response({"Failed":"user info not provided",
                          "errot":str(e)},status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def job_opening(request):
+    try:
+        jobs= Job.objects.filter(user=request.user)
+        serializer = JobSerializer(jobs,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"Failed":f"Failed to get job opening by {request.user} ",
+                         "errot":str(e)},status=status.HTTP_400_BAD_REQUEST)

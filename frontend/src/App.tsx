@@ -13,6 +13,8 @@ import DashboardJG from "./Pages/DashboardJG.js";
 import JobApplicant from "./Pages/JobApplicant.js";
 import Profile from "./Pages/Profile.js";
 import Job from "./Pages/Job.js";
+import JobPostingForm from "./Components/PostJob.js";
+import JGApplication from "./Pages/JGApplication.js";
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
           <Route path="/JG/applicant" element={<JobApplicant />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/job/:id" element={<Job />} />
+          <Route path="/job/post" element={<JobPostingForm />} />
+          <Route path="/jobs" element={<JGApplication />} />
         </Routes>
       </Router>
     </AuthProvider>
