@@ -97,22 +97,10 @@ class CustomLogin(TokenObtainPairView):
             'role':role,
         }, status=status.HTTP_200_OK)
         
-class CustomLogoutView(APIView):
-    permission_classes = [IsAuthenticated] 
-
-    def post(self, request):
-        try:
-            refresh_token = request.data.get("refresh_token")
-            if not refresh_token:
-                return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-            token = RefreshToken(refresh_token)
-            token.blacklist()  # Blacklist the refresh token
-
-            return Response({"success": True, "message": "Logout successful"}, status=status.HTTP_200_OK)
-        
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+def logout(requst):
+    return Response({"success":True})
 
 @swagger_auto_schema(
     method='post', 
@@ -257,31 +245,72 @@ def get_applicant(request):
         except Exception as e:
             return Response({"error":f"Error in getting jobs, {str(e)}"},status=status.HTTP_400_BAD_REQUEST)
         
+        
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def shortlist_applicant(request,id):
-    try:
-        user_role=request.user.role
-        if user_role=="JG":
-            applicant=JobApplication.objects.get(application_id=id)
-            applicant.application_status="ACCEPTED"
-            applicant.save()
-            return Response({"message":"Applicant shortlisted"},status=status.HTTP_200_OK)
-    except:
-        return Response({"error":"Error in shortlisting applicant"},status=status.HTTP_400_BAD_REQUEST)
+def update_applicant_status(request, id):
+    """
+    Update the status of a job application.
     
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def reject_applicant(request,id):
+    Args:
+        request (Request): The HTTP request object
+        id (int): The application ID
+    
+    Expected JSON payload:
+    {
+        "status": "ACCEPTED" | "REJECTED" | "PENDING"
+    }
+    
+    Returns:
+        Response: Confirmation message or error response
+    """
     try:
-        user_role=request.user.role
-        if user_role=="JG":
-            applicant=JobApplication.objects.get(application_id=id)
-            applicant.application_status="REJECTED"
-            applicant.save()
-            return Response({"message":"Applicant rejected"},status=status.HTTP_200_OK)
-    except:
-        return Response({"error":"Error in rejecting applicant"},status=status.HTTP_400_BAD_REQUEST)
+        # Check user role
+        if request.user.role != "JG":
+            return Response(
+                {"error": "Unauthorized. Only Job Guides can update applicant status"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Validate status in request
+        new_status = request.data.get('status')
+        valid_statuses = ["ACCEPTED", "REJECTED", "PENDING"]
+        
+        if not new_status or new_status not in valid_statuses:
+            return Response(
+                {"error": f"Invalid status. Must be one of {valid_statuses}"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Retrieve the job application
+        try:
+            applicant = JobApplication.objects.get(application_id=id)
+        except JobApplication.DoesNotExist:
+            return Response(
+                {"error": f"No application found with ID {id}"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Update application status
+        applicant.application_status = new_status
+        applicant.save()
+        
+        # Log the action
+        logger.info(f"Applicant {id} status updated to {new_status} by {request.user.username}")
+        
+        return Response(
+            {"message": f"Applicant status updated to {new_status} successfully"},
+            status=status.HTTP_200_OK
+        )
+    
+    except Exception as e:
+        # Log the unexpected error
+        logger.error(f"Error in updating applicant {id} status: {str(e)}")
+        
+        return Response(
+            {"error": "An unexpected error occurred while updating applicant status"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

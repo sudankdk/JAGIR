@@ -168,13 +168,52 @@ export const jobApplicant = async () => {
   }
 };
 
-export const logout =async ()=>{
+export const logout = async () => {
   const token = localStorage.getItem("accessToken");
-  if(token){
-    const response = await api.get("api.logout")
-  }
-}
 
+  try {
+    if (token) {
+      const respose = await api.post("/logout/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(respose, respose.data);
+      const flag: Boolean = respose.data.success;
+      console.log(flag);
+      if (flag) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("username");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateStatus = async (id: number, status: string) => {
+  const token = localStorage.getItem("accessToken");
+  if (!token) {
+    console.error("No access token found");
+    return null;
+  }
+
+  try {
+    const response = await api.post(
+      `/job/applicant/status/${id}/`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (e) {
+    console.error("Error updating status:", e instanceof Error ? e.message : e);
+    return null; // Or throw new Error("Failed to update status");
+  }
+};
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),

@@ -1,85 +1,126 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoMdDownload } from "react-icons/io";
 import { MdOutlinePreview } from "react-icons/md";
 import { SERVER_URL } from "../API/Server";
+import { updateStatus } from "../API/Endpont";
 
-const Applicant = ({ id, profile, name, cv, status, job_name }) => {
+const Applicant = ({ id, profile, name, cv, initialStatus, job_name }) => {
+  const statusOptions = ["PENDING", "ACCEPTED", "REJECTED"];
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const theme: { [key: string]: string } = {
-    ACCEPTED: "text-green-600",
-    PENDING: "text-yellow-600",
-    REJECTED: "text-red-600",
+    ACCEPTED: "text-green-600 bg-green-100",
+    PENDING: "text-yellow-600 bg-yellow-100",
+    REJECTED: "text-red-600 bg-red-100",
+  };
+
+  const [status, setStatus] = useState(initialStatus);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleStatusChange = (newStatus: string) => {
+    console.log("status ", newStatus);
+    handleAplicant(id, newStatus);
+    setIsDropdownOpen(false);
   };
 
   const handleCvDownload = () => {
     if (!cv) {
       return alert("Applicant must enter a CV");
     }
-
     const fileUrl = `${SERVER_URL}${cv}`;
-
     const link = document.createElement("a");
     link.href = fileUrl;
-    link.setAttribute("download", `${name}.pdf`);
+    link.setAttribute("download", `${name}_CV.pdf`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+
+  const handleAplicant = async (id: number, newStatus: string) => {
+    try {
+      const data = await updateStatus(id, newStatus);
+      if (data) setStatus(newStatus);
+    } catch (error) {
+      console.error("Failed to update applicant status:", error);
+    }
+  };
+
   const handleCvOpen = () => {
     if (!cv) {
       return alert("Applicant must enter a CV");
     }
-
-    const fileUrl = `${SERVER_URL}${cv}`; // Ensure the correct URL
-
-    window.open(fileUrl, "_blank"); // Opens in a new tab
+    window.open(`${SERVER_URL}${cv}`, "_blank");
   };
-  const [colo, setColo] = useState<string>("");
-  useEffect(() => {
-    setColo(theme[status]);
-  }, []);
+
   return (
-    <div className="w-full bg-slate-200 text-black p-4 rounded-lg shadow-md">
-      <div
-        className="grid grid-cols-3  items-center text-center py-4 px-6 bg-white rounded-md shadow-sm hover:shadow-lg transition-shadow"
-        key={id}
-      >
-        {/* Profile Picture */}
-        <div className="flex items-center gap-3 justify-center">
+    <div className="w-full bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 mb-4">
+      <div className="grid grid-cols-3 items-center p-4 border-b border-gray-100">
+        {/* Profile Section */}
+        <div className="flex items-center justify-center space-x-4">
           <img
-            className="h-14 w-14 rounded-full border-2 border-gray-300"
-            src={`${SERVER_URL}` + profile || "/default-profile.png"}
-            alt="Profile"
+            className="h-16 w-16 rounded-full object-cover border-2 border-gray-300"
+            src={profile ? `${SERVER_URL}${profile}` : "/default-profile.png"}
+            alt={`${name}'s profile`}
           />
-          <div className="text-lg font-semibold">{name}</div>
+          <div className="text-lg font-semibold text-gray-800">{name}</div>
         </div>
-        {/* <div className="text-lg font-semibold">{name}</div> */}
-        <div className="text-lg font-semibold">{job_name}</div>
+
+        {/* Job Title */}
+        <div className="text-lg font-medium text-gray-700 text-center">{job_name}</div>
+
+        {/* Status Dropdown */}
+        <div ref={dropdownRef} className="relative flex items-center justify-center">
+          <div
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className={`${theme[status]} px-4 py-1 rounded-full text-sm font-medium text-center cursor-pointer hover:opacity-80 transition-opacity`}
+          >
+            {status}
+          </div>
+
+          {isDropdownOpen && (
+            <div className="absolute top-full mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+              {statusOptions
+                .filter((opt) => opt !== status)
+                .map((opt) => (
+                  <div
+                    key={opt}
+                    onClick={() => handleStatusChange(opt)}
+                    className={`${theme[opt]} px-4 py-2 text-sm cursor-pointer hover:opacity-80 transition-opacity`}
+                  >
+                    {opt}
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
       </div>
-      <div className="grid grid-cols-2 items-center text-center py-4 px-6 bg-white rounded-md shadow-sm hover:shadow-lg transition-shadow">
-        {/* Name */}
 
-        {/* Status */}
-        <div
-          className={`text-sm font-medium ${colo} bg-blue-100 px-6 py-1 rounded-full`}
-        >
-          {status}
-        </div>
-
-        {/* Download Icon */}
+      {/* Actions */}
+      <div className="flex justify-end p-3 space-x-3">
         <button
           onClick={handleCvOpen}
-          className="text-2xl text-blue-600 flex items-center justify-center hover:text-blue-800 p-2 transition"
+          className="text-blue-600 hover:text-blue-800 transition-colors duration-200 p-2 rounded-full hover:bg-blue-50"
+          title="View CV"
         >
-          <IoMdDownload />
+          <MdOutlinePreview className="text-2xl" />
         </button>
-
-        {/* Preview CV */}
-        {/* <button
-          onClick={handleCvOpen}
-          className="text-2xl text-gray-600 flex items-center justify-center hover:text-gray-800 p-2 transition"
+        <button
+          onClick={handleCvDownload}
+          className="text-green-600 hover:text-green-800 transition-colors duration-200 p-2 rounded-full hover:bg-green-50"
+          title="Download CV"
         >
-          <MdOutlinePreview />
-        </button> */}
+          <IoMdDownload className="text-2xl" />
+        </button>
       </div>
     </div>
   );

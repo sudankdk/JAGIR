@@ -1,14 +1,14 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,shortlist_applicant,reject_applicant,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name,user_info,CustomLogoutView
+from .views import CustomLogin,register,create_job,get_job,delete_job,apply_job,get_applicant,update_applicant_status,close_job,open_cv,search_usernames,search_job_by_location,search_job_by_jobname,SavedJobs,Search_by_location_name,user_info,logout
 
 
 urlpatterns = [
     #auth
     path('login/',CustomLogin.as_view(),name="Login"),
     path('register/',register,name="Register"),
-    path('logout/', CustomLogoutView.as_view(), name="logout"),
+    path('logout/', logout, name="logout"),
 
     
     #user
@@ -26,8 +26,7 @@ urlpatterns = [
     #applicant
     path('job/apply/<str:id>/',apply_job,name="apply_job"),
     path('job/applicant/',get_applicant,name="get_applicant"),
-    path('job/applicant/shortlist/<str:id>/',shortlist_applicant,name="shortlist_applicant"),
-    path('job/applicant/reject/<str:id>/',reject_applicant,name="reject_applicant"),
+    path('job/applicant/status/<str:id>/',update_applicant_status),
     path('job/applicant/cv/<str:id>/',open_cv,name="cv"),
     
     #search

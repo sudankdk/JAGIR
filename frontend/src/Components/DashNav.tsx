@@ -1,9 +1,9 @@
 import { IoIosNotifications } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
-import { userInfo } from "../API/Endpont";
+import { logout, userInfo } from "../API/Endpont";
 import { useEffect, useState, useRef } from "react";
 import { SERVER_URL } from "../API/Server";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const DashNav = () => {
   const [pp, setPP] = useState<string>("");
@@ -21,6 +21,11 @@ const DashNav = () => {
     };
     fetchUserData();
   }, []);
+
+  const dismiss = async () => {
+    await logout();
+    nav("/login");
+  };
 
   const getname = () => {
     const nameobject = localStorage.getItem("username");
@@ -83,7 +88,10 @@ const DashNav = () => {
               >
                 Profile
               </button>
-              <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+              <button
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                onClick={dismiss}
+              >
                 Logout
               </button>
             </div>

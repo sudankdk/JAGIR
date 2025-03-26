@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 
 // Reusable JobCard component
 const JobCard = ({ title, company }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const [cvFile, setCvFile] = useState(null); // State to store CV file
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cvFile, setCvFile] = useState(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -97,7 +97,7 @@ const Bookmarks = () => {
             </h2>
           </div>
 
-          <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
+          <div className="flex items-center space-x-4 bg-blue-600 text-white p-4 rounded-lg cursor-pointer">
             <CiBookmark className="text-2xl" />
             <h2 className="text-lg font-semibold">
               <Link to="/Dashboard/bookmarks">Saved Jobs</Link>
