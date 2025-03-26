@@ -214,6 +214,60 @@ export const updateStatus = async (id: number, status: string) => {
     return null; // Or throw new Error("Failed to update status");
   }
 };
+
+export const jobOpening = async () => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    try {
+      const response = await api.get("/job/opening/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
+export const jobClose = async (id: string) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    console.log(token);
+    try {
+      const resposne = await api.post(
+        `/job/close/${id}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return resposne;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
+export const jobDelete = async (id: string) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    try {
+      const resposne = await api.delete(`/job/delete/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return resposne;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),

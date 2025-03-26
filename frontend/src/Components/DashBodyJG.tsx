@@ -40,7 +40,10 @@ const DashBodyJG = () => {
 
             <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
               <FaBriefcase className="text-2xl" />
-              <h2 className="text-lg font-semibold"> Jobs</h2>
+              <h2 className="text-lg font-semibold">
+                {" "}
+                <Link to="/jobs">Jobs</Link>
+              </h2>
             </div>
           </nav>
         </div>

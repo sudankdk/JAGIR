@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import {
   FaBriefcase,
@@ -11,9 +11,11 @@ import {
 import { Link } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import { jobClose, jobDelete, jobOpening } from "../API/Endpont";
 
 const JGApplication = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [jobs, setJobs] = useState([]);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "short", day: "numeric" };
@@ -24,68 +26,45 @@ const JGApplication = () => {
     setActiveDropdown(activeDropdown === jobId ? null : jobId);
   };
 
-  const handleStatusChange = (jobId, newStatus) => {
+  const handleStatusChange = async (jobId, newStatus) => {
     setJobs(
       jobs.map((job) =>
         job.job_id === jobId ? { ...job, status: newStatus } : job
       )
     );
+    const data = await jobClose(jobId);
     setActiveDropdown(null);
-    // API call would go here
     console.log(`Changed job ${jobId} status to ${newStatus}`);
+    return data;
   };
 
-  const handleDeleteJob = (jobId) => {
+  const handleDeleteJob = async (jobId) => {
     setJobs(jobs.filter((job) => job.job_id !== jobId));
+    try {
+      const data = await jobDelete(jobId);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
     // API call would go here
     console.log(`Deleted job ${jobId}`);
   };
+
+  const handleJobs = async () => {
+    try {
+      const data = await jobOpening();
+      setJobs(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // Sample data - in your app, this would come from props or API
-  const jobs = [
-    {
-      job_id: "043cb71d-e947-499d-a5c9-d3dc31d1349a",
-      job_name: "frontend",
-      location: "Jhapa",
-      description: "this is a nice job",
-      salary: "1245.00",
-      created_at: "2025-02-09T14:56:45.357999Z",
-      status: "open",
-      skills: "JS NODE",
-    },
-    {
-      job_id: "a0c67610-aaaf-404e-9f59-96eed6b84223",
-      job_name: "frontend",
-      location: "Ithari",
-      description: "this is a nice job",
-      salary: "1245.00",
-      created_at: "2024-12-23T16:48:47.809868Z",
-      status: "open",
-      skills: "JS NODE",
-    },
-    {
-      job_id: "38c8752f-d23c-4790-afaa-2a96f12a28a0",
-      job_name: "SWE",
-      location: "Ithari",
-      description: "this is a great ass job",
-      salary: "1245.00",
-      created_at: "2024-12-21T10:21:58.144067Z",
-      status: "closed",
-      skills: "JS NODE",
-    },
-    {
-      job_id: "dfca0d3e-6bf9-4564-9b32-517770c9f937",
-      job_name: "UI/UX",
-      location: "Ithari",
-      description: "this is a bad ass job",
-      salary: "12345.00",
-      created_at: "2024-12-19T11:43:05.639582Z",
-      status: "open",
-      skills: "JAVA",
-    },
-  ];
+  //
 
-  // Format date to be more readable
-
+  useEffect(() => {
+    handleJobs();
+  }, []);
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50">
       {/* Left Side Navigation */}
@@ -123,7 +102,7 @@ const JGApplication = () => {
         <div className="mb-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-800">My Job Postings</h2>
           <Link
-            to="/JG/jobs/new"
+            to="/job/post"
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
           >
             Post New Job

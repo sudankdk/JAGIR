@@ -50,7 +50,7 @@ const JobApplicant = () => {
           <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
             <FaBriefcase className="text-2xl" />
             <h2 className="text-lg font-semibold">
-              <Link to="/JG/dashboard">Jobs</Link>
+              <Link to="/jobs">Jobs</Link>
             </h2>
           </div>
         </nav>
@@ -59,7 +59,9 @@ const JobApplicant = () => {
       {/* Main Content */}
       <div className="w-full lg:w-4/5 p-6 text-gray-800">
         {loading ? (
-          <div className="text-center text-lg font-semibold">Loading applicants...</div>
+          <div className="text-center text-lg font-semibold">
+            Loading applicants...
+          </div>
         ) : error ? (
           <div className="text-center text-red-600">
             <p>{error}</p>
