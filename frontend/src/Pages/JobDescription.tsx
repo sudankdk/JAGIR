@@ -4,7 +4,7 @@ import { Job } from "../interface/Interfaces";
 import React from "react";
 import { MapPin, CalendarDays, Briefcase, Coins } from "lucide-react";
 
-const JobDescriptionCard = ({
+export const JobDescriptionCard = ({
   id,
   jobGiverName,
   job_name,

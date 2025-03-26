@@ -12,6 +12,7 @@ import JobDescription from "./Pages/JobDescription.js";
 import DashboardJG from "./Pages/DashboardJG.js";
 import JobApplicant from "./Pages/JobApplicant.js";
 import Profile from "./Pages/Profile.js";
+import Job from "./Pages/Job.js";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/JG/dashboard" element={<DashboardJG />} />
           <Route path="/JG/applicant" element={<JobApplicant />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/job/:id" element={<Job />} />
         </Routes>
       </Router>
     </AuthProvider>

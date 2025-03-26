@@ -6,7 +6,7 @@ import { IoIosDocument } from "react-icons/io";
 import { allJobs, applyJob } from "../API/Endpont";
 import toast, { Toaster } from "react-hot-toast";
 import { Job } from "../interface/Interfaces";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FileText,
   MapPin,
@@ -16,6 +16,7 @@ import {
   Filter,
   Plus,
 } from "lucide-react";
+import { nav } from "motion/react-client";
 
 // Reusable JobCard component
 const JobCard = ({ id, title, location, status, date }) => {
@@ -123,6 +124,12 @@ const JobCard = ({ id, title, location, status, date }) => {
             <XCircle className="w-5 h-5" />
           </button>
         </div> */}
+        <Link
+          to={`/job/${id}`}
+          className="text-blue-600 hover:underline mt-4 block text-center"
+        >
+          View Details
+        </Link>
       </div>
 
       {/* Modal for CV Upload */}
@@ -176,7 +183,7 @@ const Application = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [filter, setFilter] = useState<string>("all");
-
+  const nav = useNavigate();
   useEffect(() => {
     const handleAllJobs = async () => {
       try {
@@ -205,6 +212,9 @@ const Application = () => {
       setFilteredJobs(filtered);
     }
   }, [filter, jobs]);
+  const handleSingleJob = () => {
+    nav("/job/description/details");
+  };
 
   const renderSideNavigation = () => (
     <div className="w-full min-h-screen lg:w-1/5 bg-blue-800 text-white p-8">
