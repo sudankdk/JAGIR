@@ -29,7 +29,7 @@ urlpatterns = [
     
     #applicant
     path('job/apply/<str:id>/',apply_job,name="apply_job"),
-    path('job/applicant/',get_applicant,name="get_applicant"),
+    path('job/applicants/detail/',get_applicant,name="get_applicant"),
     path('job/applicant/status/<str:id>/',update_applicant_status),
     path('job/applicant/cv/<str:id>/',open_cv,name="cv"),
     

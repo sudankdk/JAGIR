@@ -7,7 +7,7 @@ class MyUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=MyUser
-        fields = ['username','bio','role','profile_image','date_joined','skills','x','github','portfolio','title','location' ] #skills , achivements, contact indfos
+        fields = ['username','email','bio','role','profile_image','date_joined','skills','x','github','portfolio','title','location' ] #skills , achivements, contact indfos
 
 
 
@@ -111,3 +111,10 @@ class SavedJobSerializer(serializers.ModelSerializer):
         model=SavedJob
         fields=['user','job','saved_at']
         read_only_fields=['user']
+        
+from .models import Notification
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'message', 'created_at', 'read']

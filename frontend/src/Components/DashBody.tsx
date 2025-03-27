@@ -84,7 +84,7 @@ const DashBody = () => {
 
           <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
             <IoIosDocument className="text-2xl" />
-            <h2 className="text-lg font-semibold">Resume Upgrade</h2>
+            <h2 className="text-lg font-semibold">Resume upgrade</h2>
           </div>
         </nav>
       </div>
@@ -124,7 +124,10 @@ const DashBody = () => {
         <div className="m-2 p-4 bg-white shadow-lg rounded-lg mt-8">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Saved Jobs</h2>
-            <Link to="/Dashboard/bookmarks" className="text-blue-600 hover:underline">
+            <Link
+              to="/Dashboard/bookmarks"
+              className="text-blue-600 hover:underline"
+            >
               View All
             </Link>
           </div>

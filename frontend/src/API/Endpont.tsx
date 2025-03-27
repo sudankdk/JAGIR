@@ -159,7 +159,7 @@ export const userInfo = async () => {
 export const jobApplicant = async () => {
   const token = localStorage.getItem("accessToken");
   if (token) {
-    const response = await api.get("/job/applicant/", {
+    const response = await api.get("/job/applicants/detail/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -6,6 +6,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .models import Job,JobApplication,MyUser,SavedJob
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from PyPDF2 import PdfReader
 from .serializer import UserLoginSerializer,RegisterUserSerializer,JobSerializer,JobApplySerializer,JobApplicantSerializer,MyUserSerializer,SavedJobSerializer
 import mimetypes
@@ -226,11 +228,13 @@ def apply_job(request, id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_applicant(request):
+        print("hello it me")
         try:
             user_role=request.user.role
             user=str(request.user)
             empt_arr=[]
             if user_role=="JG":
+                print("ya aaudai xa")
                 # applicant=JobApplication.objects.all()
                 applicant=JobApplication.objects.select_related('job','applicant').all()
                 serializer=JobApplicantSerializer(applicant,many=True)
@@ -281,10 +285,29 @@ def update_applicant_status(request, id):
                 {"error": f"Invalid status. Must be one of {valid_statuses}"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        # Retrieve the job application
         try:
             applicant = JobApplication.objects.get(application_id=id)
+            print(applicant)
+            if new_status == "ACCEPTED" or new_status == "REJECTED":
+                channel_layer = get_channel_layer()
+            
+                message_type = "resume_accepted" if new_status == "ACCEPTED" else "resume_rejected"
+                message_text = f"Your resume has been acceptd by {request.user} for job that (you) {applicant}" if new_status == "ACCEPTED" else "Your resume has been rejected!"
+            
+                async_to_sync(channel_layer.group_send)(
+                "task_updates",
+                {
+                    "type": "send.notification",
+                    "message": {
+                        "type": message_type,
+                        "message": message_text,
+                        "status": new_status,
+                    }
+                    }
+                )
+            
+            # Retrieve the job application
+        
         except JobApplication.DoesNotExist:
             return Response(
                 {"error": f"No application found with ID {id}"}, 

@@ -16,6 +16,7 @@ export const JobDescriptionCard = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cvFile, setCvFile] = useState(null);
+  const token = localStorage.getItem("accessToken");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -61,17 +62,24 @@ export const JobDescriptionCard = ({
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="mt-4 md:mt-0 flex space-x-3">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold shadow-md hover:shadow-lg"
-          >
-            Apply Now
-          </button>
-          <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300 font-semibold border border-gray-200">
-            Save Job
-          </button>
+          {token ? (
+            <>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold shadow-md hover:shadow-lg"
+              >
+                Apply Now
+              </button>
+              <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300 font-semibold border border-gray-200">
+                Save Job
+              </button>
+            </>
+          ) : (
+            <p className="text-red-500 font-semibold">
+              Login is required to apply.
+            </p>
+          )}
         </div>
       </div>
 
