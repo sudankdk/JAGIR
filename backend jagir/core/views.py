@@ -456,3 +456,17 @@ def job_opening(request):
     except Exception as e:
         return Response({"Failed":f"Failed to get job opening by {request.user} ",
                          "errot":str(e)},status=status.HTTP_400_BAD_REQUEST)
+        
+        
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_job_id(request,id):
+    try:
+        job=Job.objects.get(job_id=id)
+        serializer=JobSerializer(job)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response({"Failed":f"Failed to get job opening by {request.user} ",
+                         "errot":str(e)},status=status.HTTP_400_BAD_REQUEST)
+    

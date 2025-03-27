@@ -268,6 +268,22 @@ export const jobDelete = async (id: string) => {
   }
 };
 
+export const get_job_by_id = async (id: String) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    try {
+      const resposne = await api.get(`/job/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return resposne.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),

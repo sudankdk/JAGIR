@@ -1,35 +1,38 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { jobApplicant } from "../API/Endpont"; // Assuming you have this function
-import Applicant from "../Components/Applicant";
+import { get_job_by_id } from "../API/Endpont"; // Assuming you have this function
+import { JobDescriptionCard } from "./JobDescription";
 
 const Job = () => {
-  const { id } = useParams(); 
-  const [applicant, setApplicant] = useState([]);
+  const { id } = useParams();
+  const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const handleApplicantData = async () => {
+  const handleJobData = async () => {
     setLoading(true);
-    setError("");
     try {
-      const data = await jobApplicant(id); // Pass the job ID to fetch relevant applicants
-      setApplicant(data);
+      console.log("Fetching job details for ID:", id);
+      const data = await get_job_by_id(id);
+      console.log("Response data:", data);
+
+      setJob(data); // Store the single job object
+      setLoading(false);
     } catch (err) {
-      setError("Failed to fetch job applicants. Please try again.");
-    } finally {
+      console.error("Error fetching job:", err);
+      setError("Failed to fetch job details. Please try again.");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    handleApplicantData();
-  }, [id]); // Re-fetch when the job ID changes
+    handleJobData();
+  }, [id]);
 
   if (loading) {
     return (
       <div className="text-center text-gray-500">
-        <p>Loading applicants...</p>
+        <p>Loading job details...</p>
       </div>
     );
   }
@@ -42,13 +45,23 @@ const Job = () => {
     );
   }
 
+  if (!job) {
+    return <p>No job details found.</p>;
+  }
+
   return (
     <div>
-      {applicant.length > 0 ? (
-        applicant.map((job) => <Applicant key={job.application_id} {...job} />)
-      ) : (
-        <p>No applicants found for this job.</p>
-      )}
+      <JobDescriptionCard
+        key={job.job_id}
+        id={job.job_id}
+        jobGiverName={job.user?.username || "Unknown"}
+        job_name={job.job_name}
+        location={job.location}
+        dateCreated={new Date(job.created_at).toLocaleDateString()}
+        Salary={job.salary}
+        JobDescriptions={job.description}
+        Skills={job.skills}
+      />
     </div>
   );
 };
