@@ -112,9 +112,9 @@ class SavedJobSerializer(serializers.ModelSerializer):
         fields=['user','job','saved_at']
         read_only_fields=['user']
         
-from .models import Notification
+# from .models import Notification
 
-class NotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Notification
-        fields = ['id', 'message', 'created_at', 'read']
+# class NotificationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Notification
+#         fields = ['id', 'message', 'created_at', 'read']
