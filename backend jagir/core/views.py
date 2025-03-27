@@ -22,6 +22,7 @@ from django.views.decorators.cache import cache_page
 from rest_framework.throttling import UserRateThrottle
 from drf_yasg.utils import swagger_auto_schema
 from django.db import connection
+from .tasks import send_resume_accept_email,send_resume_reject_email
 
 #Group banaune
 
@@ -287,8 +288,14 @@ def update_applicant_status(request, id):
             )
         try:
             applicant = JobApplication.objects.get(application_id=id)
-            print(applicant)
+            email= applicant.applicant.email
+            print(email)
+                
             if new_status == "ACCEPTED" or new_status == "REJECTED":
+                if  new_status=="ACCEPTED" and email :
+                    send_resume_accept_email(email=email)
+                elif new_status=="REJECTED" and email:
+                    send_resume_reject_email(email=email)
                 channel_layer = get_channel_layer()
             
                 message_type = "resume_accepted" if new_status == "ACCEPTED" else "resume_rejected"

@@ -52,3 +52,7 @@ docker-compose.override.yml
 
 # Node.js (if using React in the frontend within the same repo)
 node_modules/
+
+
+envJagir
+db.sqlite3
