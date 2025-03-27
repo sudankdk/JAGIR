@@ -14,6 +14,9 @@ const DashNav = () => {
   const handleProfile = () => {
     nav("/profile");
   };
+  const handleNav = () => {
+    nav("/notifications");
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       const data = await userInfo();
@@ -60,11 +63,8 @@ const DashNav = () => {
       {/* Right Section */}
       <div className="flex items-center space-x-6 relative">
         {/* Notification Icon */}
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer" onClick={handleNav}>
           <IoIosNotifications className="text-2xl text-gray-600 hover:text-blue-500" />
-          <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-1">
-            3
-          </span>
         </div>
 
         {/* Message Icon */}

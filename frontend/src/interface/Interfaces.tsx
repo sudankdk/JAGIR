@@ -16,3 +16,12 @@ export interface Job {
   status: string;
   user: User;
 }
+
+ export interface Notification {
+  id: string;
+  type: 'acceptance' | 'interview' | 'review';
+  jobSeeker: string;
+  position: string;
+  date: string;
+  status: string;
+}

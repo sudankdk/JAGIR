@@ -283,6 +283,32 @@ export const get_job_by_id = async (id: String) => {
     }
   }
 };
+export const createJob = async (
+  job_name,
+  location,
+  description,
+  skills,
+  salary,
+  status
+) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    try {
+      const response = await api.post(
+        `/job/create/`,
+        { job_name, location, description, skills, salary, status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 export default useAxiosInterceptors;
 

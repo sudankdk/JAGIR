@@ -1,5 +1,7 @@
+import { createJob } from "../API/Endpont";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import axios from "axios";
 
 const JobPostingForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,9 @@ const JobPostingForm = () => {
     status: "open",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -19,10 +24,37 @@ const JobPostingForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Job Posted:", formData);
-    // Add your submission logic here
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await createJob(
+        formData.job_name,
+        formData.location,
+        formData.description,
+        formData.skills,
+        formData.salary,
+        formData.status
+      );
+      console.log("Job Posted:", response.data);
+      // Reset form on successful submission
+      setFormData({
+        job_name: "",
+        location: "",
+        description: "",
+        skills: "",
+        salary: "",
+        status: "open",
+      });
+      alert("Job posted successfully!");
+    } catch (err) {
+      console.error("Error posting job:", err);
+      setError("Failed to post job. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -223,10 +255,23 @@ const JobPostingForm = () => {
               <button
                 type="submit"
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.01] shadow-lg"
+                disabled={loading}
               >
-                Post Job Opportunity
+                {loading ? "Posting..." : "Post Job Opportunity"}
               </button>
             </motion.div>
+
+            {/* Error Message */}
+            {error && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1 }}
+                className="mt-4 text-red-500"
+              >
+                {error}
+              </motion.p>
+            )}
           </form>
         </motion.div>
 
@@ -295,9 +340,7 @@ const JobPostingForm = () => {
                 </div>
               </>
             ) : (
-              <p className="text-gray-500 italic">
-                Fill the form to see a preview of your job posting
-              </p>
+              <p className="text-gray-600">No job preview available</p>
             )}
           </div>
         </motion.div>

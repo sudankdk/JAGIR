@@ -15,6 +15,7 @@ import Profile from "./Pages/Profile.js";
 import Job from "./Pages/Job.js";
 import JobPostingForm from "./Components/PostJob.js";
 import JGApplication from "./Pages/JGApplication.js";
+import NotificationSend from "./Notifications/Notifications.js";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/job/:id" element={<Job />} />
           <Route path="/job/post" element={<JobPostingForm />} />
           <Route path="/jobs" element={<JGApplication />} />
+          <Route path="/notifications" element={<NotificationSend />} />
         </Routes>
       </Router>
     </AuthProvider>
