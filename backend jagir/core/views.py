@@ -158,22 +158,22 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 @api_view(['GET'])
 @throttle_classes([UserRateThrottle])
 def get_job(request):
-    print("hello")
-    cache_key = "jobs_cache_key"
+    # print("hello")
+    # cache_key = "jobs_cache_key"
     
-    cached_jobs = cache.get(cache_key)
-    if cached_jobs:
-        logger.info("Cache HIT")
-        return Response(cached_jobs, status=status.HTTP_200_OK)
+    # cached_jobs = cache.get(cache_key)
+    # if cached_jobs:
+    #     logger.info("Cache HIT")
+    #     return Response(cached_jobs, status=status.HTTP_200_OK)
 
-    logger.info("Cache MISS")
+    # logger.info("Cache MISS")
     jobs = Job.objects.select_related("user")
     serializer = JobSerializer(jobs, many=True)
-    cache.set(cache_key, serializer.data, timeout=900)
+    # cache.set(cache_key, serializer.data, timeout=900)
     
     return Response(serializer.data, status=status.HTTP_200_OK)
     

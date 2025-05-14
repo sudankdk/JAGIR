@@ -78,7 +78,7 @@ Ensure you have the following installed:
 Ensure Redis is running before starting Celery.
 
 ```sh
-celery -A backend worker --loglevel=info
+celery -A base worker --loglevel=info
 ```
 
 ## Contributing

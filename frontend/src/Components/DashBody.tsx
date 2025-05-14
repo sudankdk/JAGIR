@@ -29,8 +29,8 @@ export const JobCard = ({ id, title, location, status, date }) => {
 };
 
 const DashBody = () => {
-  const [jobs, setJobs] = useState<Job[]>();
-  const [savedJob, setSavedJob] = useState<Job[]>();
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [savedJob, setSavedJob] = useState<Job[]>([]);
 
   useEffect(() => {
     const handleAllJobs = async () => {
@@ -104,6 +104,7 @@ const DashBody = () => {
           {jobs?.length > 0 ? (
             jobs?.slice(0, 3).map((job) => (
               <JobCard
+                key={job.job_id}
                 id={job.job_id}
                 title={job.job_name}
                 location={job.location}
