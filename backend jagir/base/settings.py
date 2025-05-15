@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     "debug_toolbar",
     'drf_yasg',
+    'cv_rater',
 
 ]
 
