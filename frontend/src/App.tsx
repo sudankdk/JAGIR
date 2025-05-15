@@ -16,6 +16,7 @@ import Job from "./Pages/Job.js";
 import JobPostingForm from "./Components/PostJob.js";
 import JGApplication from "./Pages/JGApplication.js";
 import NotificationSend from "./Notifications/Notifications.js";
+import ResumeUpgrade from "./Pages/ResumeUpgrade.js";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/job/post" element={<JobPostingForm />} />
           <Route path="/jobs" element={<JGApplication />} />
           <Route path="/notifications" element={<NotificationSend />} />
+          <Route path="/resume-score" element={<ResumeUpgrade />} />
         </Routes>
       </Router>
     </AuthProvider>

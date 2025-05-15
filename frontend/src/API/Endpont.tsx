@@ -310,6 +310,22 @@ export const createJob = async (
   }
 };
 
+export const cvScore = async (title: string, file: File) => {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/models/upload-cv/",
+      { title, file },
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default useAxiosInterceptors;
 
 // path('search/job/location/<str:location>/',search_job_by_location,name="search-job-location"),

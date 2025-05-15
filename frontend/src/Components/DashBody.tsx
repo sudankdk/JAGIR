@@ -84,7 +84,9 @@ const DashBody = () => {
 
           <div className="flex items-center space-x-4 hover:bg-blue-600 hover:text-white p-4 rounded-lg cursor-pointer">
             <IoIosDocument className="text-2xl" />
-            <h2 className="text-lg font-semibold">Resume upgrade</h2>
+            <h2 className="text-lg font-semibold">
+               <Link to="/resume-score">Resume Upgrade</Link>
+            </h2>
           </div>
         </nav>
       </div>
